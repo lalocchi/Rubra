@@ -175,36 +175,22 @@ function setupAuthListeners() {
         showAuthScreen('method');
     });
 
-    // Onboarding Step 2: Phone Registration Continue
-    const btnPhoneContinue = document.getElementById('btn-phone-continue');
-    const inputPhone = document.getElementById('input-phone');
-    btnPhoneContinue.addEventListener('click', () => {
-        const phone = inputPhone.value.trim();
-        if (phone.length < 7) {
-            showToast('Please enter a valid phone number');
-            return;
-        }
-        // Simulated registration transition
-        showAuthScreen('email');
-        switchAuthTab('signup');
-    });
+    // Onboarding Step 2: Email Registration Continue
+    const btnEmailContinue = document.getElementById('btn-email-continue');
+    if (btnEmailContinue) {
+        btnEmailContinue.addEventListener('click', () => {
+            showAuthScreen('email');
+            switchAuthTab('signup');
+        });
+    }
 
-    // Onboarding Step 2: Google Sign In
+    // Onboarding Step 2: Google Sign In (Warning message)
     const btnGoogleLogin = document.getElementById('btn-google-login');
-    btnGoogleLogin.addEventListener('click', () => {
-        // Simulate google login success
-        const mockGoogleToken = 'google_jwt_token_mock_' + Math.random().toString(36).substring(2);
-        localStorage.setItem('rubra_auth_token', mockGoogleToken);
-        showToast('Logged in successfully via Google');
-        checkAuth();
-    });
-
-    // Onboarding Step 2: Switch to Email
-    const btnGotoEmailAuth = document.getElementById('btn-goto-email-auth');
-    btnGotoEmailAuth.addEventListener('click', () => {
-        showAuthScreen('email');
-        switchAuthTab('signup');
-    });
+    if (btnGoogleLogin) {
+        btnGoogleLogin.addEventListener('click', () => {
+            showToast("For now we don't have that feature, please login with email");
+        });
+    }
 
     // Onboarding Step 3: Back button
     const btnBackToMethod = document.getElementById('btn-back-to-method');
@@ -218,13 +204,6 @@ function setupAuthListeners() {
 
     tabSignup.addEventListener('click', () => switchAuthTab('signup'));
     tabLogin.addEventListener('click', () => switchAuthTab('login'));
-
-    // Collapsible optional cycle configuration inputs
-    const btnToggleCycleSettings = document.getElementById('btn-toggle-cycle-settings');
-    const collapsibleSection = btnToggleCycleSettings.closest('.collapsible-section');
-    btnToggleCycleSettings.addEventListener('click', () => {
-        collapsibleSection.classList.toggle('open');
-    });
 
     // Sign Up submit button
     const btnSubmitSignup = document.getElementById('btn-submit-signup');
@@ -292,14 +271,11 @@ function handleSignUp() {
     const nameInput = document.getElementById('signup-name');
     const emailInput = document.getElementById('signup-email');
     const passwordInput = document.getElementById('signup-password');
-    const cycleLengthInput = document.getElementById('signup-cycle-length');
-    const periodDurationInput = document.getElementById('signup-period-duration');
-
     const name = nameInput.value.trim();
     const email = emailInput.value.trim();
     const password = passwordInput.value;
-    const cycleLength = parseInt(cycleLengthInput.value) || 28;
-    const periodDuration = parseInt(periodDurationInput.value) || 5;
+    const cycleLength = 28;
+    const periodDuration = 5;
 
     let hasError = false;
 
