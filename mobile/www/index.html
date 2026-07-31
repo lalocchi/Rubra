@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#121216">
+    <meta name="theme-color" content="#ffffff" id="meta-theme-color">
     <title>Rubra - Period & Cycle Tracker</title>
     <!-- Google Fonts: Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,18 +12,179 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Background Glow Blobs -->
-    <div class="glow-blob glow-1"></div>
-    <div class="glow-blob glow-2"></div>
 
-    <div class="app-container">
+    <!-- ========================================== -->
+    <!-- AUTH CONTAINER (Light Theme Onboarding/Auth) -->
+    <!-- ========================================== -->
+    <div id="auth-container" class="auth-container">
+        
+        <!-- STEP 1: Language Selection -->
+        <section id="auth-step-language" class="auth-screen active">
+            <div class="auth-graphic">
+                <img src="images/girl_hugging_earth.png" alt="Language Selection" class="illustration-img">
+            </div>
+            <h2 class="auth-title">Please select your language</h2>
+            <p class="auth-subtitle">You can always change this later</p>
+            
+            <div class="auth-dropdown-wrapper">
+                <select id="select-language" class="auth-select">
+                    <option value="en" selected>English</option>
+                    <option value="az">Azərbaycanca</option>
+                </select>
+                <div class="select-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+            
+            <button id="btn-language-continue" class="btn-primary auth-btn-margin">CONTINUE</button>
+        </section>
+
+        <!-- STEP 2: Registration Method (Figma Onboarding 2) -->
+        <section id="auth-step-method" class="auth-screen">
+            <div class="auth-graphic">
+                <img src="images/hand_holding_phone.png" alt="Registration Method" class="illustration-img">
+            </div>
+            <h2 class="auth-title">How would you like to register?</h2>
+            <p class="auth-subtitle">You can change this later</p>
+            
+            <div class="auth-input-container">
+                <input type="tel" id="input-phone" placeholder="Phone number" class="auth-input">
+            </div>
+            
+            <button id="btn-phone-continue" class="btn-primary">CONTINUE</button>
+            
+            <div class="auth-divider">or register using</div>
+            
+            <button id="btn-google-login" class="btn-secondary">
+                <svg class="google-icon" width="18" height="18" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v3.92h6.69a5.74 5.74 0 0 1-2.48 3.77v3.13h3.99c2.33-2.14 3.54-5.3 3.54-8.75z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.99-3.13c-1.11.75-2.52 1.19-3.94 1.19-3.03 0-5.6-2.05-6.51-4.82H1.38v3.24C3.36 21.49 7.43 24 12 24z"/>
+                    <path fill="#FBBC05" d="M5.49 14.33c-.24-.72-.38-1.5-.38-2.33s.14-1.61.38-2.33V6.43H1.38A11.96 11.96 0 0 0 0 12c0 2.05.52 4 1.38 5.57l4.11-3.24z"/>
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.43-3.43C17.93 1.19 15.24 0 12 0 7.43 0 3.36 2.51 1.38 6.43l4.11 3.24c.91-2.77 3.48-4.92 6.51-4.92z"/>
+                </svg>
+                Google
+            </button>
+
+            <button id="btn-goto-email-auth" class="btn-link">Sign up or Log in with E-mail instead</button>
+        </section>
+
+        <!-- STEP 3: Switcher Screen (Sign Up / Log In - Figma Screens 2, 3, 5) -->
+        <section id="auth-step-email" class="auth-screen">
+            <h2 class="auth-title">Get Started Now</h2>
+            <p class="auth-subtitle text-center">Create an account or log in to explore about our app</p>
+            
+            <!-- Tab Switcher -->
+            <div class="auth-switcher">
+                <button id="tab-signup" class="switcher-tab active">Sign Up</button>
+                <button id="tab-login" class="switcher-tab">Log in</button>
+            </div>
+
+            <!-- FORMS -->
+            <div class="auth-forms">
+                
+                <!-- SIGN UP FORM -->
+                <div id="form-signup" class="auth-form active">
+                    <div class="input-group" id="group-signup-name">
+                        <label class="input-label">Full Name</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="signup-name" class="auth-input">
+                            <span class="error-indicator-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E63946" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                            </span>
+                        </div>
+                        <span class="error-text">This section is required</span>
+                    </div>
+
+                    <div class="input-group" id="group-signup-email">
+                        <label class="input-label">E-mail</label>
+                        <div class="input-wrapper">
+                            <input type="email" id="signup-email" class="auth-input">
+                            <span class="error-indicator-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E63946" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                            </span>
+                        </div>
+                        <span class="error-text">Please enter a valid email address</span>
+                    </div>
+
+                    <div class="input-group" id="group-signup-password">
+                        <label class="input-label">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="signup-password" class="auth-input">
+                            <span class="error-indicator-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E63946" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                            </span>
+                        </div>
+                        <span class="error-text">Password must be at least 6 characters</span>
+                    </div>
+
+                    <!-- Collapsible Optional Cycle Inputs -->
+                    <div class="collapsible-section">
+                        <button type="button" id="btn-toggle-cycle-settings" class="collapsible-trigger">
+                            <span>Cycle Configuration (Optional)</span>
+                            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div id="cycle-settings-content" class="collapsible-content">
+                            <div class="input-group">
+                                <label class="input-label">Default Cycle Length (days)</label>
+                                <input type="number" id="signup-cycle-length" class="auth-input" value="28" min="20" max="45">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Default Period Duration (days)</label>
+                                <input type="number" id="signup-period-duration" class="auth-input" value="5" min="3" max="10">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="btn-submit-signup" class="btn-primary auth-btn-margin">Sign Up</button>
+                </div>
+
+                <!-- LOG IN FORM -->
+                <div id="form-login" class="auth-form">
+                    <div class="input-group" id="group-login-email">
+                        <label class="input-label">E-mail</label>
+                        <div class="input-wrapper">
+                            <input type="email" id="login-email" class="auth-input">
+                            <span class="error-indicator-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E63946" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                            </span>
+                        </div>
+                        <span class="error-text">Please enter a valid email address</span>
+                    </div>
+
+                    <div class="input-group" id="group-login-password">
+                        <label class="input-label">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="login-password" class="auth-input">
+                            <span class="error-indicator-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E63946" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                            </span>
+                        </div>
+                        <span class="error-text">Password is required</span>
+                    </div>
+
+                    <button id="btn-submit-login" class="btn-primary auth-btn-margin">Log In</button>
+                </div>
+            </div>
+
+            <button id="btn-back-to-method" class="btn-link">Back to registration methods</button>
+        </section>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MAIN APP CONTAINER (Dark Theme Tracker Dashboard) -->
+    <!-- ========================================== -->
+    <div id="main-app-container" class="app-container" style="display: none;">
+        <!-- Background Glow Blobs -->
+        <div class="glow-blob glow-1"></div>
+        <div class="glow-blob glow-2"></div>
+
         <!-- App Header -->
         <header class="app-header">
             <div class="logo-area">
                 <span class="logo-dot"></span>
                 <h1 class="logo-text">Rubra</h1>
             </div>
-            <button class="icon-button" id="btn-today" aria-label="Bugün">
+            <button class="icon-button" id="btn-today" aria-label="Today">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             </button>
         </header>
@@ -32,6 +193,15 @@
         <main class="app-content">
             <!-- PAGE: HOME -->
             <section id="page-home" class="app-page active">
+                <!-- Welcome Greeting Banner -->
+                <div class="glass-card welcome-card" style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; border-color: rgba(255, 255, 255, 0.05); background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);">
+                    <img src="images/waving_hijab_girl.png" alt="Welcome" style="width: 55px; height: 55px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); background-color: rgba(255,255,255,0.05); object-fit: contain;">
+                    <div>
+                        <h3 style="font-size: 15px; font-weight: 600; color: #ffffff; margin-bottom: 3px;">Welcome to Rubra!</h3>
+                        <p style="font-size: 11px; color: var(--text-secondary); line-height: 1.4;">Your personal cycle tracker. Ad-free and completely private.</p>
+                    </div>
+                </div>
+
                 <!-- Circular Tracker Display -->
                 <div class="circle-container">
                     <div class="circle-outer">
@@ -46,10 +216,10 @@
                             </defs>
                         </svg>
                         <div class="circle-inner">
-                            <span class="circle-subtitle" id="cycle-day-label">Tsikl Günü</span>
+                            <span class="circle-subtitle" id="cycle-day-label">Cycle Day</span>
                             <span class="circle-title" id="cycle-day-number">12</span>
-                            <span class="circle-status" id="cycle-phase-name">Follikulyar Faza</span>
-                            <span class="circle-desc" id="cycle-phase-desc">Hamiləlik şansı: Yüksək</span>
+                            <span class="circle-status" id="cycle-phase-name">Follicular Phase</span>
+                            <span class="circle-desc" id="cycle-phase-desc">Pregnancy chance: High</span>
                         </div>
                     </div>
                 </div>
@@ -58,51 +228,51 @@
                 <div class="action-container">
                     <button class="btn-log-period" id="btn-log-period">
                         <span class="btn-icon">🩸</span>
-                        <span class="btn-text" id="log-period-text">Periodu Başlat</span>
+                        <span class="btn-text" id="log-period-text">Start Period</span>
                     </button>
                 </div>
 
                 <!-- Card: Log Today's Symptoms & Mood -->
                 <div class="glass-card logger-card">
-                    <h2 class="card-title">Bugünkü Vəziyyət</h2>
+                    <h2 class="card-title">Today's Status</h2>
                     
                     <!-- Mood Grid -->
                     <div class="log-section">
-                        <span class="section-label">Əhvalınız necədir?</span>
+                        <span class="section-label">How are you feeling?</span>
                         <div class="mood-selector">
-                            <button class="mood-btn" data-mood="happy" title="Xoşbəxt">
+                            <button class="mood-btn" data-mood="happy" title="Happy">
                                 <span class="mood-emoji">😊</span>
-                                <span class="mood-name">Şən</span>
+                                <span class="mood-name">Happy</span>
                             </button>
-                            <button class="mood-btn" data-mood="calm" title="Sakit">
+                            <button class="mood-btn" data-mood="calm" title="Calm">
                                 <span class="mood-emoji">😌</span>
-                                <span class="mood-name">Sakit</span>
+                                <span class="mood-name">Calm</span>
                             </button>
-                            <button class="mood-btn" data-mood="tired" title="Yorğun">
+                            <button class="mood-btn" data-mood="tired" title="Tired">
                                 <span class="mood-emoji">😴</span>
-                                <span class="mood-name">Yorğun</span>
+                                <span class="mood-name">Tired</span>
                             </button>
-                            <button class="mood-btn" data-mood="sad" title="Kədərli">
+                            <button class="mood-btn" data-mood="sad" title="Sensitive">
                                 <span class="mood-emoji">😢</span>
-                                <span class="mood-name">Həssas</span>
+                                <span class="mood-name">Sensitive</span>
                             </button>
-                            <button class="mood-btn" data-mood="irritated" title="Əsəbi">
+                            <button class="mood-btn" data-mood="irritated" title="Irritated">
                                 <span class="mood-emoji">😠</span>
-                                <span class="mood-name">Əsəbi</span>
+                                <span class="mood-name">Irritated</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- Symptoms Chips -->
                     <div class="log-section">
-                        <span class="section-label">Simptomlar</span>
+                        <span class="section-label">Symptoms</span>
                         <div class="symptom-chips">
-                            <button class="chip" data-symptom="cramps">Qarın ağrısı</button>
-                            <button class="chip" data-symptom="headache">Baş ağrısı</button>
-                            <button class="chip" data-symptom="bloating">Köp</button>
-                            <button class="chip" data-symptom="fatigue">Halsızlıq</button>
-                            <button class="chip" data-symptom="backache">Bel ağrısı</button>
-                            <button class="chip" data-symptom="acne">Sızanaq</button>
+                            <button class="chip" data-symptom="cramps">Cramps</button>
+                            <button class="chip" data-symptom="headache">Headache</button>
+                            <button class="chip" data-symptom="bloating">Bloating</button>
+                            <button class="chip" data-symptom="fatigue">Fatigue</button>
+                            <button class="chip" data-symptom="backache">Backache</button>
+                            <button class="chip" data-symptom="acne">Acne</button>
                         </div>
                     </div>
                 </div>
@@ -111,48 +281,52 @@
                 <div class="glass-card insight-card">
                     <div class="insight-icon">✨</div>
                     <div class="insight-details">
-                        <h3 class="insight-title">Növbəti Period Proqnozu</h3>
-                        <p class="insight-desc" id="next-period-prediction">Yüklənir...</p>
+                        <h3 class="insight-title">Next Period Forecast</h3>
+                        <p class="insight-desc" id="next-period-prediction">Loading...</p>
                     </div>
                 </div>
             </section>
 
             <!-- PAGE: HISTORY -->
             <section id="page-history" class="app-page">
-                <h2 class="page-title">Tsikl Tarixçəsi</h2>
+                <h2 class="page-title">Cycle History</h2>
                 <div class="history-list" id="history-container">
                     <!-- History items will be inserted here dynamically -->
                     <div class="empty-state">
-                        <p>Hələ heç bir qeyd yoxdur.</p>
-                        <span class="empty-hint">Periodu Başlat düyməsinə klikləyərək ilk tsikli qeyd edin.</span>
+                        <p>No records yet.</p>
+                        <span class="empty-hint">Tap Start Period to log your first cycle.</span>
                     </div>
                 </div>
             </section>
 
             <!-- PAGE: SETTINGS -->
             <section id="page-settings" class="app-page">
-                <h2 class="page-title">Tənzimləmələr</h2>
+                <h2 class="page-title">Settings</h2>
                 <div class="glass-card settings-card">
                     <div class="settings-group">
                         <label for="input-cycle-len" class="setting-label">
-                            <span>Tsikl müddəti (gün)</span>
+                            <span>Cycle duration (days)</span>
                             <span class="setting-val" id="val-cycle-len">28</span>
                         </label>
                         <input type="range" id="input-cycle-len" min="20" max="45" value="28" class="range-slider">
                     </div>
                     <div class="settings-group">
                         <label for="input-period-len" class="setting-label">
-                            <span>Menstruasiya müddəti (gün)</span>
+                            <span>Period duration (days)</span>
                             <span class="setting-val" id="val-period-len">5</span>
                         </label>
                         <input type="range" id="input-period-len" min="3" max="10" value="5" class="range-slider">
                     </div>
                 </div>
 
-                <div class="glass-card about-card">
-                    <h3 class="about-title">Rubra haqqında</h3>
-                    <p class="about-text">Məlumatlarınız yalnız cihazınızda saxlanılır, heç bir serverə ötürülmür. Reklamsızdır və tamamilə gizlidir.</p>
-                    <span class="app-version">Versiya 1.0.0</span>
+                <div class="glass-card logout-card" style="margin-top: 10px; padding: 12px 20px;">
+                    <button id="btn-logout" class="btn-logout-danger" style="width: 100%; border: 1px solid rgba(230,57,70,0.4); background: rgba(230,57,70,0.08); color: #FF4D6D; padding: 12px; border-radius: 16px; font-family: Outfit; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">Log Out</button>
+                </div>
+
+                <div class="glass-card about-card" style="margin-top: 18px;">
+                    <h3 class="about-title">About Rubra</h3>
+                    <p class="about-text">Your data is only stored on your device, it is not sent to any server. Ad-free and completely private.</p>
+                    <span class="app-version">Version 1.0.0</span>
                 </div>
             </section>
         </main>
@@ -161,15 +335,15 @@
         <nav class="app-navbar">
             <button class="nav-item active" data-page="home">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <span class="nav-label">Ana Səhifə</span>
+                <span class="nav-label">Home</span>
             </button>
             <button class="nav-item" data-page="history">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                <span class="nav-label">Tarixçə</span>
+                <span class="nav-label">History</span>
             </button>
             <button class="nav-item" data-page="settings">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                <span class="nav-label">Tənzimləmə</span>
+                <span class="nav-label">Settings</span>
             </button>
         </nav>
     </div>
