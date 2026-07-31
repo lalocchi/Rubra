@@ -18,8 +18,17 @@
     <!-- ========================================== -->
     <div id="auth-container" class="auth-container">
         
+        <!-- STEP 0: Welcome Screen -->
+        <section id="auth-step-welcome" class="auth-screen active">
+            <div class="auth-graphic" style="margin-top: 30px; margin-bottom: 30px;">
+                <img src="images/waving_hijab_girl.png" alt="Welcome Mascot" class="illustration-img" style="width: 200px; height: 200px;">
+            </div>
+            <h2 class="auth-title" style="margin-bottom: 20px; font-size: 28px;">Welcome to Rubra</h2>
+            <button id="btn-welcome-start" class="btn-primary auth-btn-margin">Start</button>
+        </section>
+
         <!-- STEP 1: Language Selection -->
-        <section id="auth-step-language" class="auth-screen active">
+        <section id="auth-step-language" class="auth-screen">
             <div class="auth-graphic">
                 <img src="images/girl_hugging_earth.png" alt="Language Selection" class="illustration-img">
             </div>
@@ -193,15 +202,6 @@
         <main class="app-content">
             <!-- PAGE: HOME -->
             <section id="page-home" class="app-page active">
-                <!-- Welcome Greeting Banner -->
-                <div class="glass-card welcome-card" style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; border-color: rgba(255, 255, 255, 0.05); background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);">
-                    <img src="images/waving_hijab_girl.png" alt="Welcome" style="width: 55px; height: 55px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); background-color: rgba(255,255,255,0.05); object-fit: contain;">
-                    <div>
-                        <h3 style="font-size: 15px; font-weight: 600; color: #ffffff; margin-bottom: 3px;">Welcome to Rubra!</h3>
-                        <p style="font-size: 11px; color: var(--text-secondary); line-height: 1.4;">Your personal cycle tracker. Ad-free and completely private.</p>
-                    </div>
-                </div>
-
                 <!-- Circular Tracker Display -->
                 <div class="circle-container">
                     <div class="circle-outer">

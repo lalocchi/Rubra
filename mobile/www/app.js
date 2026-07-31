@@ -143,7 +143,7 @@ function checkAuth() {
         mainAppContainer.style.display = 'none';
         themeColorMeta.setAttribute('content', '#ffffff'); // Light theme meta color
         
-        showAuthScreen('language');
+        showAuthScreen('welcome');
     }
 }
 
@@ -161,6 +161,14 @@ function showAuthScreen(screenName) {
 
 // --- Onboarding & Forms Event Listeners ---
 function setupAuthListeners() {
+    // Onboarding Step 0: Welcome Start
+    const btnWelcomeStart = document.getElementById('btn-welcome-start');
+    if (btnWelcomeStart) {
+        btnWelcomeStart.addEventListener('click', () => {
+            showAuthScreen('language');
+        });
+    }
+
     // Onboarding Step 1: Language Continue
     const btnLangContinue = document.getElementById('btn-language-continue');
     btnLangContinue.addEventListener('click', () => {
