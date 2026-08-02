@@ -9,7 +9,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <!-- App Modular Stylesheets -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
 
@@ -18,54 +21,69 @@
     <!-- ========================================== -->
     <div id="auth-container" class="auth-container">
         
-        <!-- STEP 1: Language Selection -->
-        <section id="auth-step-language" class="auth-screen active">
-            <div class="auth-graphic">
-                <img src="images/girl_hugging_earth.png" alt="Language Selection" class="illustration-img">
+        <!-- STEP 0: Welcome Screen -->
+        <section id="auth-step-welcome" class="auth-screen active">
+            <div class="auth-content-center">
+                <div class="auth-graphic" style="margin-top: 10px; margin-bottom: 20px;">
+                    <img src="images/waving_hijab_girl.png" alt="Welcome Mascot" class="illustration-img" style="width: 200px; height: 200px;">
+                </div>
+                <h2 class="auth-title" style="font-size: 28px; margin-bottom: 10px;">Welcome to Rubra</h2>
             </div>
-            <h2 class="auth-title">Please select your language</h2>
-            <p class="auth-subtitle">You can always change this later</p>
-            
-            <div class="auth-dropdown-wrapper">
-                <select id="select-language" class="auth-select">
-                    <option value="en" selected>English</option>
-                    <option value="az">Azərbaycanca</option>
-                </select>
-                <div class="select-arrow">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            <div class="auth-action-bottom">
+                <button id="btn-welcome-start" class="btn-primary">Start</button>
+            </div>
+        </section>
+
+        <!-- STEP 1: Language Selection -->
+        <section id="auth-step-language" class="auth-screen">
+            <div class="auth-content-center">
+                <div class="auth-graphic">
+                    <img src="images/girl_hugging_earth.png" alt="Language Selection" class="illustration-img">
+                </div>
+                <h2 class="auth-title">Please select your language</h2>
+                <p class="auth-subtitle">You can always change this later</p>
+                
+                <div class="auth-dropdown-wrapper">
+                    <select id="select-language" class="auth-select">
+                        <option value="en" selected>English</option>
+                        <option value="az">Azərbaycanca</option>
+                    </select>
+                    <div class="select-arrow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
                 </div>
             </div>
-            
-            <button id="btn-language-continue" class="btn-primary auth-btn-margin">CONTINUE</button>
+            <div class="auth-action-bottom">
+                <button id="btn-language-continue" class="btn-primary">CONTINUE</button>
+            </div>
         </section>
 
         <!-- STEP 2: Registration Method (Figma Onboarding 2) -->
         <section id="auth-step-method" class="auth-screen">
-            <div class="auth-graphic">
-                <img src="images/hand_holding_phone.png" alt="Registration Method" class="illustration-img">
-            </div>
-            <h2 class="auth-title">How would you like to register?</h2>
-            <p class="auth-subtitle">You can change this later</p>
-            
-            <div class="auth-input-container">
-                <input type="tel" id="input-phone" placeholder="Phone number" class="auth-input">
+            <div class="auth-content-center">
+                <div class="auth-graphic">
+                    <img src="images/hand_holding_phone.png" alt="Registration Method" class="illustration-img">
+                </div>
+                <h2 class="auth-title">How would you like to register?</h2>
+                <p class="auth-subtitle">You can change this later</p>
             </div>
             
-            <button id="btn-phone-continue" class="btn-primary">CONTINUE</button>
-            
-            <div class="auth-divider">or register using</div>
-            
-            <button id="btn-google-login" class="btn-secondary">
-                <svg class="google-icon" width="18" height="18" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v3.92h6.69a5.74 5.74 0 0 1-2.48 3.77v3.13h3.99c2.33-2.14 3.54-5.3 3.54-8.75z"/>
-                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.99-3.13c-1.11.75-2.52 1.19-3.94 1.19-3.03 0-5.6-2.05-6.51-4.82H1.38v3.24C3.36 21.49 7.43 24 12 24z"/>
-                    <path fill="#FBBC05" d="M5.49 14.33c-.24-.72-.38-1.5-.38-2.33s.14-1.61.38-2.33V6.43H1.38A11.96 11.96 0 0 0 0 12c0 2.05.52 4 1.38 5.57l4.11-3.24z"/>
-                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.43-3.43C17.93 1.19 15.24 0 12 0 7.43 0 3.36 2.51 1.38 6.43l4.11 3.24c.91-2.77 3.48-4.92 6.51-4.92z"/>
-                </svg>
-                Google
-            </button>
-
-            <button id="btn-goto-email-auth" class="btn-link">Sign up or Log in with E-mail instead</button>
+            <div class="auth-action-bottom">
+                <!-- Direct Email Register/Login Button replacing Phone Input & Continue -->
+                <button id="btn-email-continue" class="btn-primary" style="margin-bottom: 12px;">Continue with Email</button>
+                
+                <div class="auth-divider">or register using</div>
+                
+                <button id="btn-google-login" class="btn-secondary">
+                    <svg class="google-icon" width="18" height="18" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v3.92h6.69a5.74 5.74 0 0 1-2.48 3.77v3.13h3.99c2.33-2.14 3.54-5.3 3.54-8.75z"/>
+                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.99-3.13c-1.11.75-2.52 1.19-3.94 1.19-3.03 0-5.6-2.05-6.51-4.82H1.38v3.24C3.36 21.49 7.43 24 12 24z"/>
+                        <path fill="#FBBC05" d="M5.49 14.33c-.24-.72-.38-1.5-.38-2.33s.14-1.61.38-2.33V6.43H1.38A11.96 11.96 0 0 0 0 12c0 2.05.52 4 1.38 5.57l4.11-3.24z"/>
+                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.43-3.43C17.93 1.19 15.24 0 12 0 7.43 0 3.36 2.51 1.38 6.43l4.11 3.24c.91-2.77 3.48-4.92 6.51-4.92z"/>
+                    </svg>
+                    Google
+                </button>
+            </div>
         </section>
 
         <!-- STEP 3: Switcher Screen (Sign Up / Log In - Figma Screens 2, 3, 5) -->
@@ -115,24 +133,6 @@
                             </span>
                         </div>
                         <span class="error-text">Password must be at least 6 characters</span>
-                    </div>
-
-                    <!-- Collapsible Optional Cycle Inputs -->
-                    <div class="collapsible-section">
-                        <button type="button" id="btn-toggle-cycle-settings" class="collapsible-trigger">
-                            <span>Cycle Configuration (Optional)</span>
-                            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </button>
-                        <div id="cycle-settings-content" class="collapsible-content">
-                            <div class="input-group">
-                                <label class="input-label">Default Cycle Length (days)</label>
-                                <input type="number" id="signup-cycle-length" class="auth-input" value="28" min="20" max="45">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Default Period Duration (days)</label>
-                                <input type="number" id="signup-period-duration" class="auth-input" value="5" min="3" max="10">
-                            </div>
-                        </div>
                     </div>
 
                     <button id="btn-submit-signup" class="btn-primary auth-btn-margin">Sign Up</button>
@@ -193,15 +193,6 @@
         <main class="app-content">
             <!-- PAGE: HOME -->
             <section id="page-home" class="app-page active">
-                <!-- Welcome Greeting Banner -->
-                <div class="glass-card welcome-card" style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; border-color: rgba(255, 255, 255, 0.05); background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);">
-                    <img src="images/waving_hijab_girl.png" alt="Welcome" style="width: 55px; height: 55px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); background-color: rgba(255,255,255,0.05); object-fit: contain;">
-                    <div>
-                        <h3 style="font-size: 15px; font-weight: 600; color: #ffffff; margin-bottom: 3px;">Welcome to Rubra!</h3>
-                        <p style="font-size: 11px; color: var(--text-secondary); line-height: 1.4;">Your personal cycle tracker. Ad-free and completely private.</p>
-                    </div>
-                </div>
-
                 <!-- Circular Tracker Display -->
                 <div class="circle-container">
                     <div class="circle-outer">
@@ -348,6 +339,11 @@
         </nav>
     </div>
 
-    <script src="app.js"></script>
+    <!-- App Logic Modules (Loaded sequentially in global scope) -->
+    <script src="js/state.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/tracker.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
