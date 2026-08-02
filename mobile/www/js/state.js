@@ -11,6 +11,8 @@ let dailyLogs = {};
 let logViewDate = new Date();
 let historyViewDate = new Date();
 let selectedLogDates = []; // Selected YYYY-MM-DD date strings in log calendar
+let logRangeStart = null;
+let logRangeEnd = null;
 
 // Helper to format date as YYYY-MM-DD
 function getLocalDateString(date) {

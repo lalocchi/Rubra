@@ -581,3 +581,41 @@
 .toast {
     font-family: var(--font-primary) !important;
 }
+
+/* Centered Modal Overlay */
+.panel-overlay.centered-modal {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.panel-overlay.centered-modal.active {
+    display: flex;
+}
+
+/* Secondary Log Button */
+.btn-secondary-log {
+    width: 100%;
+    max-width: 320px;
+    border: 1.5px solid #933ce6;
+    background: none;
+    color: #933ce6;
+    padding: 14px;
+    border-radius: 28px;
+    font-weight: 600;
+    font-family: Outfit, sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-secondary-log:active {
+    transform: scale(0.96);
+    background-color: rgba(147, 60, 230, 0.05);
+}
+

@@ -72,10 +72,13 @@ function renderLogCalendar() {
     if (selectedLogDates.length === 0 && cycles.length > 0) {
         cycles.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
         const latest = cycles[0];
-        const start = new Date(latest.startDate);
-        const end = latest.endDate ? new Date(latest.endDate) : new Date(todayStr);
+        logRangeStart = latest.startDate;
+        logRangeEnd = latest.endDate || todayStr; // Treat active period ending today for display
         
         // Fill dates between start and end
+        selectedLogDates = [];
+        let start = new Date(logRangeStart);
+        let end = new Date(logRangeEnd);
         let tempDate = new Date(start);
         while (tempDate <= end) {
             selectedLogDates.push(getLocalDateString(tempDate));
@@ -144,11 +147,42 @@ function generateCalendarGrid(viewDate, gridElementId, cellType) {
                 cell.classList.add('selected-log-day');
             }
             cell.addEventListener('click', () => {
-                if (selectedLogDates.includes(dateStr)) {
-                    selectedLogDates = selectedLogDates.filter(d => d !== dateStr);
+                if (logRangeStart && logRangeEnd) {
+                    // Clicked any day when a full range is already set: start fresh selection
+                    logRangeStart = dateStr;
+                    logRangeEnd = null;
+                } else if (logRangeStart && !logRangeEnd) {
+                    if (dateStr === logRangeStart) {
+                        // Tapped same day again: clear it
+                        logRangeStart = null;
+                    } else if (dateStr > logRangeStart) {
+                        // Select end date of range
+                        logRangeEnd = dateStr;
+                    } else {
+                        // Tapped day is before start date, make it the new start date
+                        logRangeStart = dateStr;
+                    }
                 } else {
-                    selectedLogDates.push(dateStr);
+                    // Neither is set: make it the start date
+                    logRangeStart = dateStr;
                 }
+
+                // Re-calculate selectedLogDates array
+                selectedLogDates = [];
+                if (logRangeStart) {
+                    if (logRangeEnd) {
+                        let startD = new Date(logRangeStart);
+                        let endD = new Date(logRangeEnd);
+                        let tempD = new Date(startD);
+                        while (tempD <= endD) {
+                            selectedLogDates.push(getLocalDateString(tempD));
+                            tempD.setDate(tempD.getDate() + 1);
+                        }
+                    } else {
+                        selectedLogDates.push(logRangeStart);
+                    }
+                }
+
                 generateCalendarGrid(viewDate, gridElementId, cellType);
             });
         } else if (cellType === 'history') {
@@ -245,27 +279,69 @@ function saveLoggedPeriod() {
     const earliest = selectedLogDates[0];
     const latest = selectedLogDates[selectedLogDates.length - 1];
 
-    // Determine if it should be saved as active (ongoing) or complete
-    // If range ends on today, we can treat it as ongoing (endDate = null), else complete
     const isTodayIncluded = selectedLogDates.includes(todayStr);
 
-    // Save cycle record
-    // Look for overlapping cycle or create new
+    // Logical check: if trying to save as current period but the range does not contain today, warn the user!
+    if (!isTodayIncluded) {
+        const confirmMsg = "The selected dates do not include today. Are you sure this is your current period?\n\n(Click 'Cancel' to save it as a past record instead)";
+        if (!confirm(confirmMsg)) {
+            saveLoggedPeriodAsPast();
+            return;
+        }
+    }
+
+    // Save cycle record as active (ongoing: endDate = null)
     cycles = cycles.filter(c => !(c.startDate >= earliest && c.startDate <= latest));
     
     const newId = cycles.length > 0 ? Math.max(...cycles.map(c => c.id)) + 1 : 1;
     const newCycle = {
         id: newId,
         startDate: earliest,
-        endDate: isTodayIncluded ? null : latest
+        endDate: null // Current active period has null end date
     };
     cycles.push(newCycle);
 
     localStorage.setItem('rubra_cycles', JSON.stringify(cycles));
-    showToast('Period logged successfully!');
+    showToast('Current period saved successfully!');
 
     // Reset select state and route home
     selectedLogDates = [];
+    logRangeStart = null;
+    logRangeEnd = null;
+    switchPage('home');
+    updateCycleDashboard();
+}
+
+// Saves the selected calendar range as a completed past record
+function saveLoggedPeriodAsPast() {
+    if (selectedLogDates.length === 0) {
+        showToast('Please select at least one day in the calendar');
+        return;
+    }
+
+    // Sort dates chronologically
+    selectedLogDates.sort();
+    const earliest = selectedLogDates[0];
+    const latest = selectedLogDates[selectedLogDates.length - 1];
+
+    // Save cycle record as complete
+    cycles = cycles.filter(c => !(c.startDate >= earliest && c.startDate <= latest));
+
+    const newId = cycles.length > 0 ? Math.max(...cycles.map(c => c.id)) + 1 : 1;
+    const newCycle = {
+        id: newId,
+        startDate: earliest,
+        endDate: latest
+    };
+    cycles.push(newCycle);
+
+    localStorage.setItem('rubra_cycles', JSON.stringify(cycles));
+    showToast('Past record saved successfully!');
+
+    // Reset select state and route home
+    selectedLogDates = [];
+    logRangeStart = null;
+    logRangeEnd = null;
     switchPage('home');
     updateCycleDashboard();
 }
@@ -324,6 +400,12 @@ function setupTrackerListeners() {
                 panelOverlay.classList.remove('active');
             }
         });
+    }
+
+    // Save Past Record button
+    const btnSavePastRecord = document.getElementById('btn-save-past-record');
+    if (btnSavePastRecord) {
+        btnSavePastRecord.addEventListener('click', saveLoggedPeriodAsPast);
     }
 
     // Home Log button redirects to Log tab
