@@ -171,170 +171,202 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MAIN APP CONTAINER (Dark Theme Tracker Dashboard) -->
+    <!-- MAIN APP CONTAINER (Light Theme Figma Layout) -->
     <!-- ========================================== -->
     <div id="main-app-container" class="app-container" style="display: none;">
-        <!-- Background Glow Blobs -->
-        <div class="glow-blob glow-1"></div>
-        <div class="glow-blob glow-2"></div>
-
-        <!-- App Header -->
+        
+        <!-- App Header (Matching Figma mockup: Hamburger, Centered Logo, Avatar) -->
         <header class="app-header">
-            <div class="logo-area">
-                <span class="logo-dot"></span>
-                <h1 class="logo-text">Rubra</h1>
-            </div>
-            <button class="icon-button" id="btn-today" aria-label="Today">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <button class="header-action-btn" id="btn-hamburger" title="Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#933ce6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
             </button>
+            <h1 class="logo-text-center">Rubra</h1>
+            <div class="header-profile" id="btn-header-profile" title="Profile Settings">
+                <img src="images/waving_hijab_girl.png" alt="Profile Avatar" class="profile-avatar-img">
+            </div>
         </header>
+
+        <!-- Settings Slide-over Panel (Hamburger menu drawer) -->
+        <div id="settings-panel-overlay" class="panel-overlay">
+            <div class="settings-drawer">
+                <div class="drawer-header">
+                    <h3 class="drawer-title">Settings</h3>
+                    <button id="btn-close-settings" class="btn-close-drawer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                <div class="drawer-content">
+                    <div class="glass-card settings-card">
+                        <div class="settings-group">
+                            <label for="input-cycle-len" class="setting-label">
+                                <span>Cycle duration (days)</span>
+                                <span class="setting-val" id="val-cycle-len">28</span>
+                            </label>
+                            <input type="range" id="input-cycle-len" min="20" max="45" value="28" class="range-slider">
+                        </div>
+                        <div class="settings-group">
+                            <label for="input-period-len" class="setting-label">
+                                <span>Period duration (days)</span>
+                                <span class="setting-val" id="val-period-len">5</span>
+                            </label>
+                            <input type="range" id="input-period-len" min="3" max="10" value="5" class="range-slider">
+                        </div>
+                    </div>
+
+                    <div class="glass-card logout-card" style="margin-top: 10px; padding: 12px;">
+                        <button id="btn-logout" class="btn-logout-danger" style="width: 100%; border: 1px solid rgba(230,57,70,0.3); background: rgba(230,57,70,0.06); color: #FF4D6D; padding: 12px; border-radius: 16px; font-family: Outfit; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">Log Out</button>
+                    </div>
+
+                    <div class="glass-card about-card" style="margin-top: 18px;">
+                        <h3 class="about-title">About Rubra</h3>
+                        <p class="about-text">Your data is only stored on your device, it is not sent to any server. Ad-free and completely private.</p>
+                        <span class="app-version">Version 1.0.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Main Content Area -->
         <main class="app-content">
-            <!-- PAGE: HOME -->
+            
+            <!-- PAGE: HOME (Figma Page 2) -->
             <section id="page-home" class="app-page active">
-                <!-- Circular Tracker Display -->
-                <div class="circle-container">
-                    <div class="circle-outer">
-                        <svg class="progress-ring" width="220" height="220">
-                            <circle class="progress-ring__circle-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="8" fill="transparent" r="98" cx="110" cy="110" />
-                            <circle class="progress-ring__circle" id="progress-indicator" stroke="url(#gradient-accent)" stroke-width="8" stroke-dasharray="615.75" stroke-dashoffset="615.75" stroke-linecap="round" fill="transparent" r="98" cx="110" cy="110" />
-                            <defs>
-                                <linearGradient id="gradient-accent" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#FF758F" />
-                                    <stop offset="100%" stop-color="#B5179E" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                        <div class="circle-inner">
-                            <span class="circle-subtitle" id="cycle-day-label">Cycle Day</span>
-                            <span class="circle-title" id="cycle-day-number">12</span>
-                            <span class="circle-status" id="cycle-phase-name">Follicular Phase</span>
-                            <span class="circle-desc" id="cycle-phase-desc">Pregnancy chance: High</span>
+                <div class="home-tracker-wrapper">
+                    <!-- Circle Tracker Panel -->
+                    <div class="tracker-circle-card">
+                        <div class="circle-content-panel">
+                            <span class="circle-label-small">CURRENT PHASE</span>
+                            <h2 class="circle-phase-title" id="cycle-phase-name">Follicular Phase</h2>
+                            <div class="circle-divider-line"></div>
+                            <span class="circle-days-left" id="cycle-days-left-text">Next period in<br><strong>5 days</strong></span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Log Period Button Container -->
-                <div class="action-container">
-                    <button class="btn-log-period" id="btn-log-period">
-                        <span class="btn-icon">🩸</span>
-                        <span class="btn-text" id="log-period-text">Start Period</span>
+                <div class="action-container-home">
+                    <button class="btn-log-period-today" id="btn-log-period-home">
+                        <svg class="btn-plus-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                        Log Period Today
                     </button>
                 </div>
+            </section>
 
-                <!-- Card: Log Today's Symptoms & Mood -->
-                <div class="glass-card logger-card">
-                    <h2 class="card-title">Today's Status</h2>
-                    
-                    <!-- Mood Grid -->
-                    <div class="log-section">
-                        <span class="section-label">How are you feeling?</span>
-                        <div class="mood-selector">
-                            <button class="mood-btn" data-mood="happy" title="Happy">
-                                <span class="mood-emoji">😊</span>
-                                <span class="mood-name">Happy</span>
-                            </button>
-                            <button class="mood-btn" data-mood="calm" title="Calm">
-                                <span class="mood-emoji">😌</span>
-                                <span class="mood-name">Calm</span>
-                            </button>
-                            <button class="mood-btn" data-mood="tired" title="Tired">
-                                <span class="mood-emoji">😴</span>
-                                <span class="mood-name">Tired</span>
-                            </button>
-                            <button class="mood-btn" data-mood="sad" title="Sensitive">
-                                <span class="mood-emoji">😢</span>
-                                <span class="mood-name">Sensitive</span>
-                            </button>
-                            <button class="mood-btn" data-mood="irritated" title="Irritated">
-                                <span class="mood-emoji">😠</span>
-                                <span class="mood-name">Irritated</span>
-                            </button>
-                        </div>
+            <!-- PAGE: LOG (Figma Page 3 - NEW!) -->
+            <section id="page-log" class="app-page">
+                <div class="glass-card log-panel-card">
+                    <div class="log-card-header">
+                        <h2 class="log-card-title">Log Period</h2>
+                        <button id="btn-close-log" class="btn-close-x">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
                     </div>
 
-                    <!-- Symptoms Chips -->
-                    <div class="log-section">
-                        <span class="section-label">Symptoms</span>
-                        <div class="symptom-chips">
-                            <button class="chip" data-symptom="cramps">Cramps</button>
-                            <button class="chip" data-symptom="headache">Headache</button>
-                            <button class="chip" data-symptom="bloating">Bloating</button>
-                            <button class="chip" data-symptom="fatigue">Fatigue</button>
-                            <button class="chip" data-symptom="backache">Backache</button>
-                            <button class="chip" data-symptom="acne">Acne</button>
+                    <!-- Calendar Selector Component -->
+                    <div class="calendar-selector-widget">
+                        <div class="calendar-month-selector">
+                            <span class="calendar-month-title" id="log-month-title">September 2024</span>
+                            <div class="calendar-nav-arrows">
+                                <button class="calendar-arrow" id="btn-log-prev-month">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#933ce6" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                </button>
+                                <button class="calendar-arrow" id="btn-log-next-month">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#933ce6" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Week Header -->
+                        <div class="calendar-week-headers">
+                            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                        </div>
+
+                        <!-- Day Cells Grid -->
+                        <div class="calendar-days-grid" id="log-calendar-grid">
+                            <!-- Filled dynamically by JS -->
                         </div>
                     </div>
                 </div>
 
-                <!-- Next Period Insight -->
-                <div class="glass-card insight-card">
-                    <div class="insight-icon">✨</div>
-                    <div class="insight-details">
-                        <h3 class="insight-title">Next Period Forecast</h3>
-                        <p class="insight-desc" id="next-period-prediction">Loading...</p>
-                    </div>
+                <div class="action-container-home" style="margin-top: 24px;">
+                    <button class="btn-log-period-today" id="btn-save-period">Save Period</button>
                 </div>
             </section>
 
-            <!-- PAGE: HISTORY -->
+            <!-- PAGE: HISTORY (Figma Page 1) -->
             <section id="page-history" class="app-page">
-                <h2 class="page-title">Cycle History</h2>
-                <div class="history-list" id="history-container">
-                    <!-- History items will be inserted here dynamically -->
-                    <div class="empty-state">
-                        <p>No records yet.</p>
-                        <span class="empty-hint">Tap Start Period to log your first cycle.</span>
-                    </div>
-                </div>
-            </section>
+                <div class="glass-card log-panel-card">
+                    <!-- History Read-Only Calendar Component -->
+                    <div class="calendar-selector-widget" style="padding: 0;">
+                        <div class="calendar-month-selector">
+                            <span class="calendar-month-title" id="history-month-title">July 2024</span>
+                            <div class="calendar-nav-arrows">
+                                <button class="calendar-arrow" id="btn-hist-prev-month">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#933ce6" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                </button>
+                                <button class="calendar-arrow" id="btn-hist-next-month">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#933ce6" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
 
-            <!-- PAGE: SETTINGS -->
-            <section id="page-settings" class="app-page">
-                <h2 class="page-title">Settings</h2>
-                <div class="glass-card settings-card">
-                    <div class="settings-group">
-                        <label for="input-cycle-len" class="setting-label">
-                            <span>Cycle duration (days)</span>
-                            <span class="setting-val" id="val-cycle-len">28</span>
-                        </label>
-                        <input type="range" id="input-cycle-len" min="20" max="45" value="28" class="range-slider">
-                    </div>
-                    <div class="settings-group">
-                        <label for="input-period-len" class="setting-label">
-                            <span>Period duration (days)</span>
-                            <span class="setting-val" id="val-period-len">5</span>
-                        </label>
-                        <input type="range" id="input-period-len" min="3" max="10" value="5" class="range-slider">
+                        <!-- Week Header -->
+                        <div class="calendar-week-headers">
+                            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                        </div>
+
+                        <!-- Day Cells Grid -->
+                        <div class="calendar-days-grid" id="history-calendar-grid">
+                            <!-- Filled dynamically by JS -->
+                        </div>
                     </div>
                 </div>
 
-                <div class="glass-card logout-card" style="margin-top: 10px; padding: 12px 20px;">
-                    <button id="btn-logout" class="btn-logout-danger" style="width: 100%; border: 1px solid rgba(230,57,70,0.4); background: rgba(230,57,70,0.08); color: #FF4D6D; padding: 12px; border-radius: 16px; font-family: Outfit; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">Log Out</button>
-                </div>
-
-                <div class="glass-card about-card" style="margin-top: 18px;">
-                    <h3 class="about-title">About Rubra</h3>
-                    <p class="about-text">Your data is only stored on your device, it is not sent to any server. Ad-free and completely private.</p>
-                    <span class="app-version">Version 1.0.0</span>
+                <!-- Past Records Section -->
+                <div class="past-records-section">
+                    <h3 class="past-records-label">PAST RECORDS</h3>
+                    <div class="past-records-list" id="history-container">
+                        <!-- Loaded dynamically by JS -->
+                    </div>
                 </div>
             </section>
         </main>
 
-        <!-- Bottom Navigation Bar -->
+        <!-- Bottom Navigation Bar (Figma Nav Bar Layout) -->
         <nav class="app-navbar">
             <button class="nav-item active" data-page="home">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    <path d="M12 9v6M9 12h6" stroke-width="2"/>
+                </svg>
                 <span class="nav-label">Home</span>
             </button>
-            <button class="nav-item" data-page="history">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                <span class="nav-label">History</span>
+            <button class="nav-item" data-page="log">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                <span class="nav-label">Log</span>
             </button>
-            <button class="nav-item" data-page="settings">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                <span class="nav-label">Settings</span>
+            <button class="nav-item" data-page="history">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                    <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>
+                </svg>
+                <span class="nav-label">History</span>
             </button>
         </nav>
     </div>
