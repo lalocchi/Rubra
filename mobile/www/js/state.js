@@ -14,6 +14,14 @@ let selectedLogDates = []; // Selected YYYY-MM-DD date strings in log calendar
 let logRangeStart = null;
 let logRangeEnd = null;
 
+// User Profile State
+let userProfile = {
+    name: 'Rubra User',
+    email: 'user@rubra.app',
+    avatar: 'images/avatar_1.png'
+};
+let tempSelectedAvatar = 'images/avatar_1.png';
+
 // Helper to format date as YYYY-MM-DD
 function getLocalDateString(date) {
     const offset = date.getTimezoneOffset();
@@ -80,9 +88,13 @@ function initData() {
     }
 
     // Sync input sliders with values
-    document.getElementById('input-cycle-len').value = settings.cycleLength;
-    document.getElementById('val-cycle-len').innerText = settings.cycleLength;
-    
-    document.getElementById('input-period-len').value = settings.periodLength;
-    document.getElementById('val-period-len').innerText = settings.periodLength;
+    const cycleInput = document.getElementById('profile-input-cycle-len');
+    const cycleVal = document.getElementById('profile-val-cycle-len');
+    const periodInput = document.getElementById('profile-input-period-len');
+    const periodVal = document.getElementById('profile-val-period-len');
+
+    if (cycleInput) cycleInput.value = settings.cycleLength;
+    if (cycleVal) cycleVal.innerText = settings.cycleLength;
+    if (periodInput) periodInput.value = settings.periodLength;
+    if (periodVal) periodVal.innerText = settings.periodLength;
 }

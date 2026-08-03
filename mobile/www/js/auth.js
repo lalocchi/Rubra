@@ -15,6 +15,7 @@ function checkAuth() {
         themeColorMeta.setAttribute('content', '#121216'); // Dark theme meta color
         
         initData();
+        fetchUserProfile();
         updateCycleDashboard();
         switchPage('home');
     } else {
@@ -291,5 +292,111 @@ function apiLogin(email, password) {
         
         showToast('Logged in (Demo Mode)');
         checkAuth();
+    });
+}
+
+// Fetch user details from GET /api/users/me (or simulate)
+function fetchUserProfile() {
+    const token = localStorage.getItem('rubra_auth_token');
+    if (!token) return;
+
+    // Check if it's a simulated token
+    if (token.startsWith('mock_')) {
+        simulateFetchUserProfile();
+        return;
+    }
+
+    fetch('/api/users/me', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch profile');
+        return response.json();
+    })
+    .then(data => {
+        userProfile = {
+            name: data.name || 'Rubra User',
+            email: data.email || 'user@rubra.app',
+            avatar: data.avatar || 'images/waving_hijab_girl.png'
+        };
+        // Update local settings if server holds them
+        if (data.defaultCycleLength) settings.cycleLength = parseInt(data.defaultCycleLength);
+        if (data.defaultPeriodDuration) settings.periodLength = parseInt(data.defaultPeriodDuration);
+
+        localStorage.setItem('rubra_settings', JSON.stringify(settings));
+        localStorage.setItem('rubra_user_profile', JSON.stringify(userProfile));
+
+        syncProfileUI();
+        updateCycleDashboard();
+    })
+    .catch(err => {
+        console.warn('API error fetching profile, using local simulation:', err.message);
+        simulateFetchUserProfile();
+    });
+}
+
+function simulateFetchUserProfile() {
+    const savedProfile = localStorage.getItem('rubra_user_profile');
+    if (savedProfile) {
+        userProfile = JSON.parse(savedProfile);
+    } else {
+        userProfile = {
+            name: 'Rubra User',
+            email: 'user@rubra.app',
+            avatar: 'images/waving_hijab_girl.png'
+        };
+        localStorage.setItem('rubra_user_profile', JSON.stringify(userProfile));
+    }
+    syncProfileUI();
+    updateCycleDashboard();
+}
+
+// Send profile updates PUT /api/users/profile
+function updateUserProfile(name, avatar, cycleLength, periodLength) {
+    const token = localStorage.getItem('rubra_auth_token');
+
+    // Optimistically update locally
+    userProfile.name = name;
+    userProfile.avatar = avatar;
+    settings.cycleLength = parseInt(cycleLength);
+    settings.periodLength = parseInt(periodLength);
+
+    localStorage.setItem('rubra_settings', JSON.stringify(settings));
+    localStorage.setItem('rubra_user_profile', JSON.stringify(userProfile));
+
+    syncProfileUI();
+    updateCycleDashboard();
+
+    if (!token || token.startsWith('mock_')) {
+        showToast('Profile updated locally.');
+        return;
+    }
+
+    fetch('/api/users/profile', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+            name: name,
+            avatar: avatar,
+            defaultCycleLength: parseInt(cycleLength),
+            defaultPeriodDuration: parseInt(periodLength)
+        })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Profile update failed');
+        return response.json();
+    })
+    .then(data => {
+        showToast('Profile updated successfully!');
+    })
+    .catch(err => {
+        console.warn('API error updating profile, saved locally:', err.message);
+        showToast('Saved locally (Offline Mode).');
     });
 }

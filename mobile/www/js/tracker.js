@@ -369,29 +369,71 @@ function saveLoggedPeriodAsPast() {
 
 // --- Settings Section Events ---
 function setupSettings() {
-    const cycleSlider = document.getElementById('input-cycle-len');
-    const cycleVal = document.getElementById('val-cycle-len');
-    const periodSlider = document.getElementById('input-period-len');
-    const periodVal = document.getElementById('val-period-len');
+    const cycleSlider = document.getElementById('profile-input-cycle-len');
+    const cycleVal = document.getElementById('profile-val-cycle-len');
+    const periodSlider = document.getElementById('profile-input-period-len');
+    const periodVal = document.getElementById('profile-val-period-len');
 
-    if (!cycleSlider || !periodSlider) return;
+    const themeSelect = document.getElementById('pref-theme');
+    const langSelect = document.getElementById('pref-lang');
+    const notifToggle = document.getElementById('pref-notifications');
 
-    cycleSlider.addEventListener('input', () => {
-        settings.cycleLength = parseInt(cycleSlider.value);
-        if (cycleVal) cycleVal.innerText = settings.cycleLength;
-        saveSettings();
-    });
+    if (cycleSlider && periodSlider) {
+        cycleSlider.addEventListener('input', () => {
+            if (cycleVal) cycleVal.innerText = cycleSlider.value;
+        });
 
-    periodSlider.addEventListener('input', () => {
-        settings.periodLength = parseInt(periodSlider.value);
-        if (periodVal) periodVal.innerText = settings.periodLength;
-        saveSettings();
-    });
+        periodSlider.addEventListener('input', () => {
+            if (periodVal) periodVal.innerText = periodSlider.value;
+        });
+    }
+
+    // Load preferences from localStorage on init
+    if (themeSelect) {
+        const savedTheme = localStorage.getItem('rubra_pref_theme') || 'light';
+        themeSelect.value = savedTheme;
+        applyTheme(savedTheme);
+        themeSelect.addEventListener('change', () => {
+            const val = themeSelect.value;
+            localStorage.setItem('rubra_pref_theme', val);
+            applyTheme(val);
+            showToast('Theme updated.');
+        });
+    }
+
+    if (langSelect) {
+        const savedLang = localStorage.getItem('rubra_pref_lang') || 'en';
+        langSelect.value = savedLang;
+        langSelect.addEventListener('change', () => {
+            const val = langSelect.value;
+            localStorage.setItem('rubra_pref_lang', val);
+            showToast('Language updated (Please reload to apply completely).');
+        });
+    }
+
+    if (notifToggle) {
+        const savedNotif = localStorage.getItem('rubra_pref_notifications') === 'true';
+        notifToggle.checked = savedNotif;
+        notifToggle.addEventListener('change', () => {
+            localStorage.setItem('rubra_pref_notifications', notifToggle.checked);
+            showToast(notifToggle.checked ? 'Reminders enabled.' : 'Reminders disabled.');
+        });
+    }
 }
 
-function saveSettings() {
-    localStorage.setItem('rubra_settings', JSON.stringify(settings));
-    updateCycleDashboard();
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+    } else if (theme === 'light') {
+        document.body.classList.remove('dark-theme');
+    } else {
+        // System preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.classList.add('dark-theme');
+        } else {
+            document.body.classList.remove('dark-theme');
+        }
+    }
 }
 
 // --- Tracker Listeners setup ---
@@ -400,17 +442,11 @@ function setupTrackerListeners() {
     const btnHamburger = document.getElementById('btn-hamburger');
     const panelOverlay = document.getElementById('settings-panel-overlay');
     const btnCloseSettings = document.getElementById('btn-close-settings');
-    const profileBtn = document.getElementById('btn-header-profile');
 
     if (btnHamburger && panelOverlay) {
         btnHamburger.addEventListener('click', () => {
             panelOverlay.classList.add('active');
         });
-        if (profileBtn) {
-            profileBtn.addEventListener('click', () => {
-                panelOverlay.classList.add('active');
-            });
-        }
         if (btnCloseSettings) {
             btnCloseSettings.addEventListener('click', () => {
                 panelOverlay.classList.remove('active');
@@ -419,6 +455,59 @@ function setupTrackerListeners() {
         panelOverlay.addEventListener('click', (e) => {
             if (e.target === panelOverlay) {
                 panelOverlay.classList.remove('active');
+            }
+        });
+    }
+
+    // Right Profile drawer controls
+    const profileBtn = document.getElementById('btn-header-profile');
+    const profileOverlay = document.getElementById('profile-panel-overlay');
+    const btnCloseProfile = document.getElementById('btn-close-profile');
+
+    if (profileBtn && profileOverlay) {
+        profileBtn.addEventListener('click', () => {
+            // Load latest profile values
+            syncProfileUI();
+            profileOverlay.classList.add('active');
+        });
+        if (btnCloseProfile) {
+            btnCloseProfile.addEventListener('click', () => {
+                profileOverlay.classList.remove('active');
+            });
+        }
+        profileOverlay.addEventListener('click', (e) => {
+            if (e.target === profileOverlay) {
+                profileOverlay.classList.remove('active');
+            }
+        });
+    }
+
+    // Avatar selection grid items click
+    const avatarOptions = document.querySelectorAll('.avatar-option');
+    avatarOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            avatarOptions.forEach(o => o.classList.remove('active'));
+            option.classList.add('active');
+            tempSelectedAvatar = option.getAttribute('data-avatar');
+        });
+    });
+
+    // Save Profile CTA
+    const btnSaveProfile = document.getElementById('btn-save-profile');
+    if (btnSaveProfile) {
+        btnSaveProfile.addEventListener('click', () => {
+            const cycleSlider = document.getElementById('profile-input-cycle-len');
+            const periodSlider = document.getElementById('profile-input-period-len');
+            if (cycleSlider && periodSlider) {
+                updateUserProfile(
+                    userProfile.name,
+                    tempSelectedAvatar,
+                    cycleSlider.value,
+                    periodSlider.value
+                );
+            }
+            if (profileOverlay) {
+                profileOverlay.classList.remove('active');
             }
         });
     }
@@ -478,4 +567,51 @@ function setupTrackerListeners() {
             renderHistory();
         });
     }
+}
+
+// Syncs loaded profile state to DOM elements
+function syncProfileUI() {
+    // Header Avatar
+    const headerAvatar = document.querySelector('#btn-header-profile img');
+    if (headerAvatar) {
+        headerAvatar.src = userProfile.avatar;
+    }
+
+    // Profile Card Avatar
+    const cardAvatar = document.getElementById('profile-card-avatar');
+    if (cardAvatar) {
+        cardAvatar.src = userProfile.avatar;
+    }
+
+    // Text details
+    const nameDisplay = document.getElementById('profile-name-display');
+    const emailDisplay = document.getElementById('profile-email-display');
+    if (nameDisplay) nameDisplay.innerText = userProfile.name;
+    if (emailDisplay) emailDisplay.innerText = userProfile.email;
+
+    // Cycle inputs in Profile
+    const cycleSlider = document.getElementById('profile-input-cycle-len');
+    const cycleVal = document.getElementById('profile-val-cycle-len');
+    const periodSlider = document.getElementById('profile-input-period-len');
+    const periodVal = document.getElementById('profile-val-period-len');
+
+    if (cycleSlider) {
+        cycleSlider.value = settings.cycleLength;
+        if (cycleVal) cycleVal.innerText = settings.cycleLength;
+    }
+    if (periodSlider) {
+        periodSlider.value = settings.periodLength;
+        if (periodVal) periodVal.innerText = settings.periodLength;
+    }
+
+    // Set temp selected avatar
+    tempSelectedAvatar = userProfile.avatar;
+    const avatarOptions = document.querySelectorAll('.avatar-option');
+    avatarOptions.forEach(opt => {
+        if (opt.getAttribute('data-avatar') === userProfile.avatar) {
+            opt.classList.add('active');
+        } else {
+            opt.classList.remove('active');
+        }
+    });
 }

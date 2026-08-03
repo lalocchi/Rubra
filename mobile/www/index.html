@@ -200,20 +200,26 @@
                     </button>
                 </div>
                 <div class="drawer-content">
+                    <!-- Account & Preference settings -->
                     <div class="glass-card settings-card">
-                        <div class="settings-group">
-                            <label for="input-cycle-len" class="setting-label">
-                                <span>Cycle duration (days)</span>
-                                <span class="setting-val" id="val-cycle-len">28</span>
+                        <!-- Notifications toggle -->
+                        <div class="settings-group" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                            <label class="setting-label" style="margin-bottom: 0;">
+                                <span>Allow notifications</span>
                             </label>
-                            <input type="range" id="input-cycle-len" min="20" max="45" value="28" class="range-slider">
+                            <label class="switch-container">
+                                <input type="checkbox" id="pref-notifications">
+                                <span class="switch-slider"></span>
+                            </label>
                         </div>
-                        <div class="settings-group">
-                            <label for="input-period-len" class="setting-label">
-                                <span>Period duration (days)</span>
-                                <span class="setting-val" id="val-period-len">5</span>
-                            </label>
-                            <input type="range" id="input-period-len" min="3" max="10" value="5" class="range-slider">
+
+                        <!-- Language selector -->
+                        <div class="settings-group" style="margin-bottom: 8px;">
+                            <label for="pref-lang" class="setting-label">Language</label>
+                            <select id="pref-lang" style="width: 100%; border: 1.5px solid #f2f2f7; border-radius: 12px; padding: 12px; font-family: Outfit; font-size: 14px; outline: none; background: #fbfbfd; color: #1c1c1e; cursor: pointer;">
+                                <option value="en" selected>English</option>
+                                <option value="az">Azerbaijani</option>
+                            </select>
                         </div>
                     </div>
 
@@ -225,6 +231,77 @@
                         <h3 class="about-title">About Rubra</h3>
                         <p class="about-text">Your data is only stored on your device, it is not sent to any server. Ad-free and completely private.</p>
                         <span class="app-version">Version 1.0.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Slide-over Panel (Symmetrical right drawer) -->
+        <div id="profile-panel-overlay" class="panel-overlay">
+            <div class="profile-drawer">
+                <div class="drawer-header" style="justify-content: flex-start; gap: 12px;">
+                    <button id="btn-close-profile" class="btn-close-drawer" style="margin-right: auto; padding: 4px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                    <h3 class="drawer-title" style="margin: 0; flex: 1; text-align: center; margin-right: 36px;">Profile</h3>
+                </div>
+                <div class="drawer-content">
+                    <!-- User details preview -->
+                    <div class="glass-card profile-info-card" style="display: flex; flex-direction: column; align-items: center; padding: 24px 20px; text-align: center; margin-bottom: 20px;">
+                        <div class="profile-avatar-container" style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 3px solid #933ce6; box-shadow: 0 4px 15px rgba(147,60,230,0.15); margin-bottom: 12px;">
+                            <img src="images/waving_hijab_girl.png" alt="User Avatar" id="profile-card-avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <h4 class="profile-user-name" id="profile-name-display" style="font-size: 18px; font-weight: 700; color: #1c1c1e; margin: 0 0 4px 0;">Rubra User</h4>
+                        <span class="profile-user-email" id="profile-email-display" style="font-size: 13px; color: #8e8e93; font-weight: 500;">user@rubra.app</span>
+                    </div>
+
+                    <!-- Avatar selection grid -->
+                    <div class="glass-card avatar-selection-card" style="padding: 16px; margin-bottom: 20px;">
+                        <span class="setting-label" style="font-size: 13px; font-weight: 700; color: #8e8e93; margin-bottom: 12px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Choose Avatar</span>
+                        <div class="avatar-grid" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; padding: 4px 0;">
+                            <div class="avatar-option active" data-avatar="images/avatar_1.png">
+                                <img src="images/avatar_1.png" alt="Avatar 1" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            </div>
+                            <div class="avatar-option" data-avatar="images/avatar_2.png">
+                                <img src="images/avatar_2.png" alt="Avatar 2" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            </div>
+                            <div class="avatar-option" data-avatar="images/avatar_3.png">
+                                <img src="images/avatar_3.png" alt="Avatar 3" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            </div>
+                            <div class="avatar-option" data-avatar="images/avatar_4.png">
+                                <img src="images/avatar_4.png" alt="Avatar 4" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            </div>
+                            <div class="avatar-option" data-avatar="images/avatar_5.png">
+                                <img src="images/avatar_5.png" alt="Avatar 5" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            </div>
+                            <div class="avatar-option" data-avatar="images/waving_hijab_girl.png">
+                                <img src="images/waving_hijab_girl.png" alt="Avatar 6" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Cycle Configuration Parameters -->
+                    <div class="glass-card settings-card" style="margin-bottom: 20px;">
+                        <span class="setting-label" style="font-size: 13px; font-weight: 700; color: #8e8e93; margin-bottom: 16px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Cycle Settings</span>
+                        <div class="settings-group" style="margin-bottom: 20px;">
+                            <label for="profile-input-cycle-len" class="setting-label">
+                                <span>Cycle duration (days)</span>
+                                <span class="setting-val" id="profile-val-cycle-len">28</span>
+                            </label>
+                            <input type="range" id="profile-input-cycle-len" min="20" max="45" value="28" class="range-slider">
+                        </div>
+                        <div class="settings-group" style="margin-bottom: 8px;">
+                            <label for="profile-input-period-len" class="setting-label">
+                                <span>Period duration (days)</span>
+                                <span class="setting-val" id="profile-val-period-len">5</span>
+                            </label>
+                            <input type="range" id="profile-input-period-len" min="3" max="10" value="5" class="range-slider">
+                        </div>
+                    </div>
+
+                    <!-- Profile Save Actions -->
+                    <div class="action-container-home" style="margin-top: 10px; margin-bottom: 20px;">
+                        <button id="btn-save-profile" class="btn-log-period-today" style="width: 100%; max-width: none;">Save Profile</button>
                     </div>
                 </div>
             </div>
