@@ -56,7 +56,7 @@ function setupAuthListeners() {
     const btnGoogleLogin = document.getElementById('btn-google-login');
     if (btnGoogleLogin) {
         btnGoogleLogin.addEventListener('click', () => {
-            showToast("For now we don't have that feature, please login with email");
+            showToast("For now we don't have that feature, please login with email", 'error');
         });
     }
 
@@ -84,11 +84,18 @@ function setupAuthListeners() {
     // Log Out button
     const btnLogout = document.getElementById('btn-logout');
     btnLogout.addEventListener('click', () => {
-        if (confirm('Are you sure you want to log out?')) {
-            localStorage.removeItem('rubra_auth_token');
-            checkAuth();
-            showToast('Logged out successfully.');
-        }
+        showConfirmDialog({
+            title: "Log Out",
+            description: "Are you sure you want to log out of Rubra? Your data will remain stored on this device.",
+            confirmText: "Log Out",
+            cancelText: "Cancel",
+            isDanger: true,
+            onConfirm: () => {
+                localStorage.removeItem('rubra_auth_token');
+                checkAuth();
+                showToast('Logged out successfully.');
+            }
+        });
     });
 }
 
