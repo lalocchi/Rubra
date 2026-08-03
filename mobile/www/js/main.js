@@ -5,8 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Setup main app handlers
     setupNavigation();
-    setupPeriodLogging();
-    setupDailyLogger();
+    setupTrackerListeners();
     setupSettings();
     
     // Route on startup

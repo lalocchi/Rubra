@@ -33,6 +33,8 @@ function switchPage(pageName) {
 
     if (pageName === 'history') {
         renderHistory();
+    } else if (pageName === 'log') {
+        renderLogCalendar();
     }
 }
 
