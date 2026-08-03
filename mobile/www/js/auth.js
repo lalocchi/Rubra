@@ -199,7 +199,9 @@ function apiRegister(name, email, password, cycleLength, periodDuration) {
     .then(async response => {
         if (!response.ok) {
             const errData = await response.json().catch(() => ({}));
-            throw new Error(errData.message || 'Registration failed');
+            const error = new Error(errData.message || 'Registration failed');
+            error.isValidationError = true;
+            throw error;
         }
         return response.json();
     })
@@ -219,6 +221,12 @@ function apiRegister(name, email, password, cycleLength, periodDuration) {
         }
     })
     .catch(err => {
+        if (err.isValidationError) {
+            // Server explicitly returned an error (e.g. email already exists)
+            showToast(err.message, 'error');
+            return;
+        }
+
         console.warn('API error during registration, falling back to local simulation:', err.message);
         
         // Offline / Simulation fallback mode
@@ -252,7 +260,9 @@ function apiLogin(email, password) {
     .then(async response => {
         if (!response.ok) {
             const errData = await response.json().catch(() => ({}));
-            throw new Error(errData.message || 'Login failed');
+            const error = new Error(errData.message || 'Login failed');
+            error.isValidationError = true;
+            throw error;
         }
         return response.json();
     })
@@ -267,6 +277,12 @@ function apiLogin(email, password) {
         }
     })
     .catch(err => {
+        if (err.isValidationError) {
+            // Server explicitly rejected the login (e.g. incorrect credentials)
+            showToast(err.message, 'error');
+            return;
+        }
+
         console.warn('API error during login, falling back to local simulation:', err.message);
         
         // Offline / Simulation fallback mode
