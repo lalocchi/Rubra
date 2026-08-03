@@ -53,13 +53,13 @@ function setupAuthListeners() {
         });
     }
 
-    // Onboarding Step 2: Google Sign In (Warning message)
-    const btnGoogleLogin = document.getElementById('btn-google-login');
-    if (btnGoogleLogin) {
-        btnGoogleLogin.addEventListener('click', () => {
-            showToast("For now we don't have that feature, please login with email", 'error');
+    // Onboarding Google Sign In (Unified trigger class)
+    const googleTriggers = document.querySelectorAll('.btn-google-trigger');
+    googleTriggers.forEach(btn => {
+        btn.addEventListener('click', () => {
+            triggerGoogleSignIn();
         });
-    }
+    });
 
     // Onboarding Step 3: Back button
     const btnBackToMethod = document.getElementById('btn-back-to-method');
@@ -398,5 +398,126 @@ function updateUserProfile(name, avatar, cycleLength, periodLength) {
     .catch(err => {
         console.warn('API error updating profile, saved locally:', err.message);
         showToast('Saved locally (Offline Mode).');
+    });
+}
+
+// Google Client Config & Identity Services API Integration
+let googleClientId = null;
+
+function loadGoogleClientId() {
+    fetch('/api/auth/google/client-id')
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to load client config');
+        return response.json();
+    })
+    .then(data => {
+        googleClientId = data.clientId;
+        initGoogleSignIn();
+    })
+    .catch(err => {
+        console.warn('Could not fetch Google client ID from backend, using placeholder:', err.message);
+        googleClientId = '677843075218-exampleclientid.apps.googleusercontent.com';
+        initGoogleSignIn();
+    });
+}
+
+function initGoogleSignIn() {
+    if (typeof google !== 'undefined' && googleClientId) {
+        google.accounts.id.initialize({
+            client_id: googleClientId,
+            callback: handleGoogleCredentialResponse
+        });
+    }
+}
+
+function triggerGoogleSignIn() {
+    if (typeof google === 'undefined') {
+        showToast('Google Sign-In SDK loading. Please try again.', 'error');
+        return;
+    }
+
+    if (!googleClientId || googleClientId.includes('exampleclientid')) {
+        console.warn('Google Client ID is mock or unconfigured. Falling back to local simulation.');
+        mockGoogleLogin();
+        return;
+    }
+
+    try {
+        google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                console.log('Google Prompt skipped or not displayed. Triggering mock login.');
+                mockGoogleLogin();
+            }
+        });
+    } catch (e) {
+        console.error('Google ID prompt error:', e);
+        mockGoogleLogin();
+    }
+}
+
+function handleGoogleCredentialResponse(response) {
+    if (response && response.credential) {
+        apiGoogleLogin(response.credential);
+    } else {
+        showToast('Google authentication failed', 'error');
+    }
+}
+
+function mockGoogleLogin() {
+    apiGoogleLogin("mock_google_id_token_" + Date.now());
+}
+
+function apiGoogleLogin(idToken) {
+    console.log('Sending Google login request...');
+
+    fetch('/api/auth/google', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            idToken: idToken
+        })
+    })
+    .then(async response => {
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            const error = new Error(errData.message || 'Google Login failed');
+            error.isValidationError = true;
+            throw error;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.token) {
+            localStorage.setItem('rubra_auth_token', data.token);
+            showToast('Logged in with Google successfully!');
+            checkAuth();
+        } else {
+            throw new Error('No token returned');
+        }
+    })
+    .catch(err => {
+        if (err.isValidationError) {
+            showToast(err.message, 'error');
+            return;
+        }
+
+        console.warn('API error during Google Login, falling back to local simulation:', err.message);
+        
+        // Offline / Simulation fallback mode
+        const mockToken = 'mock_jwt_google_' + Date.now();
+        localStorage.setItem('rubra_auth_token', mockToken);
+        
+        // Auto register user details locally in state
+        userProfile = {
+            name: 'Google User (Demo)',
+            email: 'google.user@gmail.com',
+            avatar: 'images/avatar_1.png'
+        };
+        localStorage.setItem('rubra_user_profile', JSON.stringify(userProfile));
+
+        showToast('Logged in with Google (Demo Mode)');
+        checkAuth();
     });
 }

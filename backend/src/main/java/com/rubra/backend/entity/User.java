@@ -25,6 +25,8 @@ public class User {
 
     private String name;
 
+    private String avatar;
+
     @Builder.Default
     private Integer defaultCycleLength = 28;
 
