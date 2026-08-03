@@ -230,6 +230,24 @@
             </div>
         </div>
 
+        <!-- Custom Confirm Modal Overlay (unifies alerts) -->
+        <div id="confirm-modal-overlay" class="custom-confirm-overlay">
+            <div class="custom-confirm-card">
+                <button class="confirm-close-x" id="btn-confirm-close">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+                <div class="confirm-icon-wrapper" id="confirm-icon-container">
+                    <!-- filled dynamically -->
+                </div>
+                <h3 class="confirm-title" id="confirm-title-text">Title</h3>
+                <p class="confirm-description" id="confirm-desc-text">Description</p>
+                <div class="confirm-actions">
+                    <button class="confirm-btn btn-cancel" id="btn-confirm-cancel">Cancel</button>
+                    <button class="confirm-btn btn-confirm" id="btn-confirm-ok">Confirm</button>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Main Content Area -->
         <main class="app-content">

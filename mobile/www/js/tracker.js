@@ -250,9 +250,16 @@ function renderHistoryList() {
 
         // Clicking a history item allows deleting it (clean UX matching mockup chevrons)
         item.addEventListener('click', () => {
-            if (confirm(`Would you like to delete the cycle record starting on ${start.toLocaleDateString('en-US')}?`)) {
-                deleteCycle(cycle.id);
-            }
+            showConfirmDialog({
+                title: "Delete Cycle Record",
+                description: `Are you sure you want to delete the cycle record starting on ${start.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}? This action cannot be undone.`,
+                confirmText: "Delete",
+                cancelText: "Cancel",
+                isDanger: true,
+                onConfirm: () => {
+                    deleteCycle(cycle.id);
+                }
+            });
         });
 
         container.appendChild(item);
@@ -267,29 +274,8 @@ function deleteCycle(id) {
     updateCycleDashboard();
 }
 
-// --- Period Saving logic ---
-function saveLoggedPeriod() {
-    if (selectedLogDates.length === 0) {
-        showToast('Please select at least one day in the calendar');
-        return;
-    }
-
-    // Sort dates chronologically
-    selectedLogDates.sort();
-    const earliest = selectedLogDates[0];
-    const latest = selectedLogDates[selectedLogDates.length - 1];
-
-    const isTodayIncluded = selectedLogDates.includes(todayStr);
-
-    // Logical check: if trying to save as current period but the range does not contain today, warn the user!
-    if (!isTodayIncluded) {
-        const confirmMsg = "The selected dates do not include today. Are you sure this is your current period?\n\n(Click 'Cancel' to save it as a past record instead)";
-        if (!confirm(confirmMsg)) {
-            saveLoggedPeriodAsPast();
-            return;
-        }
-    }
-
+// Helper to save current period record
+function saveCurrentPeriodRecord(earliest, latest) {
     // Save cycle record as active (ongoing: endDate = null)
     cycles = cycles.filter(c => !(c.startDate >= earliest && c.startDate <= latest));
     
@@ -312,10 +298,45 @@ function saveLoggedPeriod() {
     updateCycleDashboard();
 }
 
+// --- Period Saving logic ---
+function saveLoggedPeriod() {
+    if (selectedLogDates.length === 0) {
+        showToast('Please select at least one day in the calendar', 'error');
+        return;
+    }
+
+    // Sort dates chronologically
+    selectedLogDates.sort();
+    const earliest = selectedLogDates[0];
+    const latest = selectedLogDates[selectedLogDates.length - 1];
+
+    const isTodayIncluded = selectedLogDates.includes(todayStr);
+
+    // Logical check: if trying to save as current period but the range does not contain today, warn the user!
+    if (!isTodayIncluded) {
+        showConfirmDialog({
+            title: "Dates in the Past",
+            description: "The selected dates do not include today. Are you sure this is your current period?",
+            confirmText: "Yes, Current",
+            cancelText: "Save as Past Record",
+            isWarning: true,
+            onConfirm: () => {
+                saveCurrentPeriodRecord(earliest, latest);
+            },
+            onCancel: () => {
+                saveLoggedPeriodAsPast();
+            }
+        });
+        return;
+    }
+
+    saveCurrentPeriodRecord(earliest, latest);
+}
+
 // Saves the selected calendar range as a completed past record
 function saveLoggedPeriodAsPast() {
     if (selectedLogDates.length === 0) {
-        showToast('Please select at least one day in the calendar');
+        showToast('Please select at least one day in the calendar', 'error');
         return;
     }
 
