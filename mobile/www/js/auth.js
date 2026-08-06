@@ -53,14 +53,6 @@ function setupAuthListeners() {
         });
     }
 
-    // Onboarding Google Sign In (Unified trigger class)
-    const googleTriggers = document.querySelectorAll('.btn-google-trigger');
-    googleTriggers.forEach(btn => {
-        btn.addEventListener('click', () => {
-            triggerGoogleSignIn();
-        });
-    });
-
     // Onboarding Step 3: Back button
     const btnBackToMethod = document.getElementById('btn-back-to-method');
     btnBackToMethod.addEventListener('click', () => {
@@ -199,9 +191,10 @@ function apiRegister(name, email, password, cycleLength, periodDuration) {
     })
     .then(async response => {
         if (!response.ok) {
+            const isValidation = [400, 401, 403, 409].includes(response.status);
             const errData = await response.json().catch(() => ({}));
             const error = new Error(errData.message || 'Registration failed');
-            error.isValidationError = true;
+            error.isValidationError = isValidation;
             throw error;
         }
         return response.json();
@@ -260,9 +253,10 @@ function apiLogin(email, password) {
     })
     .then(async response => {
         if (!response.ok) {
+            const isValidation = [400, 401, 403, 409].includes(response.status);
             const errData = await response.json().catch(() => ({}));
             const error = new Error(errData.message || 'Login failed');
-            error.isValidationError = true;
+            error.isValidationError = isValidation;
             throw error;
         }
         return response.json();
@@ -320,7 +314,7 @@ function fetchUserProfile() {
         userProfile = {
             name: data.name || 'Rubra User',
             email: data.email || 'user@rubra.app',
-            avatar: data.avatar || 'images/waving_hijab_girl.png'
+            avatar: data.avatar || 'images/avatar_1.png'
         };
         // Update local settings if server holds them
         if (data.defaultCycleLength) settings.cycleLength = parseInt(data.defaultCycleLength);
@@ -346,7 +340,7 @@ function simulateFetchUserProfile() {
         userProfile = {
             name: 'Rubra User',
             email: 'user@rubra.app',
-            avatar: 'images/waving_hijab_girl.png'
+            avatar: 'images/avatar_1.png'
         };
         localStorage.setItem('rubra_user_profile', JSON.stringify(userProfile));
     }
@@ -422,12 +416,86 @@ function loadGoogleClientId() {
 }
 
 function initGoogleSignIn() {
-    if (typeof google !== 'undefined' && googleClientId) {
+    // If it's Demo Mode (mock / unconfigured client ID) or GSI SDK is not loaded
+    if (!googleClientId || googleClientId.includes('exampleclientid') || typeof google === 'undefined') {
+        renderMockGoogleButtons();
+        return;
+    }
+
+    try {
         google.accounts.id.initialize({
             client_id: googleClientId,
             callback: handleGoogleCredentialResponse
         });
+
+        const signupBtnContainer = document.getElementById('google-signup-btn');
+        if (signupBtnContainer) {
+            google.accounts.id.renderButton(signupBtnContainer, {
+                theme: 'outline',
+                size: 'large',
+                width: signupBtnContainer.offsetWidth || 280,
+                type: 'standard',
+                shape: 'rectangular',
+                text: 'signup_with',
+                logo_alignment: 'left'
+            });
+        }
+
+        const loginBtnContainer = document.getElementById('google-login-btn');
+        if (loginBtnContainer) {
+            google.accounts.id.renderButton(loginBtnContainer, {
+                theme: 'outline',
+                size: 'large',
+                width: loginBtnContainer.offsetWidth || 280,
+                type: 'standard',
+                shape: 'rectangular',
+                text: 'signin_with',
+                logo_alignment: 'left'
+            });
+        }
+
+        const methodBtnContainer = document.getElementById('google-method-btn');
+        if (methodBtnContainer) {
+            google.accounts.id.renderButton(methodBtnContainer, {
+                theme: 'outline',
+                size: 'large',
+                width: methodBtnContainer.offsetWidth || 280,
+                type: 'standard',
+                shape: 'rectangular',
+                text: 'signup_with',
+                logo_alignment: 'left'
+            });
+        }
+    } catch (e) {
+        console.warn('Could not initialize official Google button, rendering mock fallback:', e.message);
+        renderMockGoogleButtons();
     }
+}
+
+function renderMockGoogleButtons() {
+    const containers = ['google-method-btn', 'google-signup-btn', 'google-login-btn'];
+    containers.forEach(id => {
+        const container = document.getElementById(id);
+        if (container) {
+            container.innerHTML = `
+                <button class="btn-secondary btn-google-trigger" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; border: 1px solid #333340; border-radius: 8px; padding: 10px; background: #22222a; color: #ffffff; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 500;">
+                    <svg class="google-icon" width="18" height="18" viewBox="0 0 24 24" style="margin-right: 6px;">
+                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v3.92h6.69a5.74 5.74 0 0 1-2.48 3.77v3.13h3.99c2.33-2.14 3.54-5.3 3.54-8.75z"/>
+                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.99-3.13c-1.11.75-2.52 1.19-3.94 1.19-3.03 0-5.6-2.05-6.51-4.82H1.38v3.24C3.36 21.49 7.43 24 12 24z"/>
+                        <path fill="#FBBC05" d="M5.49 14.33c-.24-.72-.38-1.5-.38-2.33s.14-1.61.38-2.33V6.43H1.38A11.96 11.96 0 0 0 0 12c0 2.05.52 4 1.38 5.57l4.11-3.24z"/>
+                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.43-3.43C17.93 1.19 15.24 0 12 0 7.43 0 3.36 2.51 1.38 6.43l4.11 3.24c.91-2.77 3.48-4.92 6.51-4.92z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+            `;
+            const button = container.querySelector('.btn-google-trigger');
+            if (button) {
+                button.addEventListener('click', () => {
+                    mockGoogleLogin();
+                });
+            }
+        }
+    });
 }
 
 function triggerGoogleSignIn() {
@@ -435,20 +503,14 @@ function triggerGoogleSignIn() {
         showToast('Google Sign-In SDK loading. Please try again.', 'error');
         return;
     }
-
+    
     if (!googleClientId || googleClientId.includes('exampleclientid')) {
-        console.warn('Google Client ID is mock or unconfigured. Falling back to local simulation.');
         mockGoogleLogin();
         return;
     }
 
     try {
-        google.accounts.id.prompt((notification) => {
-            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                console.log('Google Prompt skipped or not displayed. Triggering mock login.');
-                mockGoogleLogin();
-            }
-        });
+        google.accounts.id.prompt();
     } catch (e) {
         console.error('Google ID prompt error:', e);
         mockGoogleLogin();
@@ -464,7 +526,77 @@ function handleGoogleCredentialResponse(response) {
 }
 
 function mockGoogleLogin() {
-    apiGoogleLogin("mock_google_id_token_" + Date.now());
+    showConfirmDialog({
+        title: "Google Sign-In (Demo)",
+        description: `
+            <p style="margin-bottom: 12px; font-size: 14px; color: #8e8e93;">Choose a mock Google account to continue:</p>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn-secondary mock-account-opt" data-email="ayla.alieva@gmail.com" data-name="Ayla Alieva" data-avatar="images/avatar_1.png" style="text-align: left; padding: 10px; width: 100%; justify-content: flex-start; display: flex; align-items: center; background: #22222a; border: 1px solid #333340; border-radius: 8px; cursor: pointer; color: #ffffff; gap: 12px;">
+                    <img src="images/avatar_1.png" style="width: 32px; height: 32px; border-radius: 50%;">
+                    <div style="text-align: left;">
+                        <strong style="display:block; font-size:13px; color:#ffffff;">Ayla Alieva</strong>
+                        <span style="font-size:11px; color:#8e8e93;">ayla.alieva@gmail.com</span>
+                    </div>
+                </button>
+                <button class="btn-secondary mock-account-opt" data-email="gunel.hasanova@gmail.com" data-name="Gunel Hasanova" data-avatar="images/avatar_2.png" style="text-align: left; padding: 10px; width: 100%; justify-content: flex-start; display: flex; align-items: center; background: #22222a; border: 1px solid #333340; border-radius: 8px; cursor: pointer; color: #ffffff; gap: 12px;">
+                    <img src="images/avatar_2.png" style="width: 32px; height: 32px; border-radius: 50%;">
+                    <div style="text-align: left;">
+                        <strong style="display:block; font-size:13px; color:#ffffff;">Gunel Hasanova</strong>
+                        <span style="font-size:11px; color:#8e8e93;">gunel.hasanova@gmail.com</span>
+                    </div>
+                </button>
+                <button class="btn-secondary mock-account-opt" data-email="leyla.mammadova@gmail.com" data-name="Leyla Mammadova" data-avatar="images/avatar_3.png" style="text-align: left; padding: 10px; width: 100%; justify-content: flex-start; display: flex; align-items: center; background: #22222a; border: 1px solid #333340; border-radius: 8px; cursor: pointer; color: #ffffff; gap: 12px;">
+                    <img src="images/avatar_3.png" style="width: 32px; height: 32px; border-radius: 50%;">
+                    <div style="text-align: left;">
+                        <strong style="display:block; font-size:13px; color:#ffffff;">Leyla Mammadova</strong>
+                        <span style="font-size:11px; color:#8e8e93;">leyla.mammadova@gmail.com</span>
+                    </div>
+                </button>
+            </div>
+        `,
+        confirmText: "Close",
+        cancelText: "Cancel",
+        onConfirm: () => {},
+        onCancel: () => {}
+    });
+
+    setTimeout(() => {
+        const okBtn = document.getElementById('btn-confirm-ok');
+        if (okBtn) okBtn.style.display = 'none';
+        
+        const opts = document.querySelectorAll('.mock-account-opt');
+        opts.forEach(opt => {
+            opt.addEventListener('click', () => {
+                const name = opt.getAttribute('data-name');
+                const email = opt.getAttribute('data-email');
+                const avatar = opt.getAttribute('data-avatar');
+                
+                const overlay = document.getElementById('confirm-modal-overlay');
+                if (overlay) overlay.classList.remove('active');
+                
+                apiGoogleLoginMocked(name, email, avatar);
+            });
+        });
+    }, 50);
+}
+
+function apiGoogleLoginMocked(name, email, avatar) {
+    showToast(`Logging in as ${name}...`);
+    
+    setTimeout(() => {
+        const mockToken = 'mock_jwt_google_' + Date.now();
+        localStorage.setItem('rubra_auth_token', mockToken);
+        
+        userProfile = {
+            name: name,
+            email: email,
+            avatar: avatar
+        };
+        localStorage.setItem('rubra_user_profile', JSON.stringify(userProfile));
+
+        showToast(`Logged in as ${name} (Demo Mode)`);
+        checkAuth();
+    }, 600);
 }
 
 function apiGoogleLogin(idToken) {
@@ -481,9 +613,10 @@ function apiGoogleLogin(idToken) {
     })
     .then(async response => {
         if (!response.ok) {
+            const isValidation = [400, 401, 403, 409].includes(response.status);
             const errData = await response.json().catch(() => ({}));
             const error = new Error(errData.message || 'Google Login failed');
-            error.isValidationError = true;
+            error.isValidationError = isValidation;
             throw error;
         }
         return response.json();
