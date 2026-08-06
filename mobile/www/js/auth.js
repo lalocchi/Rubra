@@ -21,6 +21,7 @@ function checkAuth() {
         
         initData();
         fetchUserProfile();
+        fetchUserCycles();
         updateCycleDashboard();
         switchPage('home');
     } else {
@@ -90,6 +91,10 @@ function setupAuthListeners() {
             isDanger: true,
             onConfirm: () => {
                 localStorage.removeItem('rubra_auth_token');
+                localStorage.removeItem('rubra_user_profile');
+                localStorage.removeItem('rubra_cycles');
+                localStorage.removeItem('rubra_daily_logs');
+                localStorage.removeItem('rubra_settings');
                 checkAuth();
                 showToast('Logged out successfully.');
             }
@@ -200,6 +205,11 @@ function apiRegister(name, email, password, cycleLength, periodDuration) {
     })
     .then(data => {
         if (data.token) {
+            localStorage.removeItem('rubra_user_profile');
+            localStorage.removeItem('rubra_cycles');
+            localStorage.removeItem('rubra_daily_logs');
+            localStorage.removeItem('rubra_settings');
+            
             localStorage.setItem('rubra_auth_token', data.token);
             showToast('Registration successful! Welcome to Rubra.');
             checkAuth();
@@ -236,6 +246,11 @@ function apiLogin(email, password) {
     })
     .then(data => {
         if (data.token) {
+            localStorage.removeItem('rubra_user_profile');
+            localStorage.removeItem('rubra_cycles');
+            localStorage.removeItem('rubra_daily_logs');
+            localStorage.removeItem('rubra_settings');
+
             localStorage.setItem('rubra_auth_token', data.token);
             showToast('Logged in successfully!');
             checkAuth();
@@ -435,6 +450,11 @@ function apiGoogleLogin(idToken) {
     })
     .then(data => {
         if (data.token) {
+            localStorage.removeItem('rubra_user_profile');
+            localStorage.removeItem('rubra_cycles');
+            localStorage.removeItem('rubra_daily_logs');
+            localStorage.removeItem('rubra_settings');
+
             localStorage.setItem('rubra_auth_token', data.token);
             showToast('Logged in with Google successfully!');
             checkAuth();
@@ -445,5 +465,31 @@ function apiGoogleLogin(idToken) {
     .catch(err => {
         console.error('Google auth error:', err);
         showToast(err.message || 'Could not connect to the server. Please try again.', 'error');
+    });
+}
+
+function fetchUserCycles() {
+    const token = localStorage.getItem('rubra_auth_token');
+    if (!token) return;
+
+    fetch(API_BASE_URL + '/api/cycles/periods', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch cycles');
+        return response.json();
+    })
+    .then(data => {
+        cycles = data;
+        localStorage.setItem('rubra_cycles', JSON.stringify(cycles));
+        updateCycleDashboard();
+        if (typeof renderHistory === 'function') renderHistory();
+        if (typeof renderLogCalendar === 'function') renderLogCalendar();
+    })
+    .catch(err => {
+        console.error('Error fetching cycles from backend:', err.message);
     });
 }

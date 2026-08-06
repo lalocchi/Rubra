@@ -136,4 +136,17 @@ public class CycleCalculationService {
                 .confidenceMessage(message)
                 .build();
     }
+
+    @Transactional
+    public void deletePeriodAndRecalculate(Long userId, Long periodId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Period period = periodRepository.findById(periodId)
+                .orElseThrow(() -> new RuntimeException("Period not found"));
+        if (!period.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Access denied");
+        }
+        periodRepository.delete(period);
+        recalculateCycles(user);
+    }
 }

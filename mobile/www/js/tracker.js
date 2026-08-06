@@ -272,6 +272,23 @@ function deleteCycle(id) {
     showToast('Record deleted.');
     renderHistory();
     updateCycleDashboard();
+
+    const token = localStorage.getItem('rubra_auth_token');
+    if (token && id && !id.toString().startsWith('mock')) {
+        fetch(API_BASE_URL + '/api/cycles/period/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to delete period from backend');
+            console.log('Period deleted from backend successfully');
+        })
+        .catch(err => {
+            console.error('Error deleting period:', err);
+        });
+    }
 }
 
 // Helper to save current period record
@@ -296,6 +313,8 @@ function saveCurrentPeriodRecord(earliest, latest) {
     logRangeEnd = null;
     switchPage('home');
     updateCycleDashboard();
+
+    syncPeriodToBackend(earliest, null);
 }
 
 // --- Period Saving logic ---
@@ -365,6 +384,8 @@ function saveLoggedPeriodAsPast() {
     logRangeEnd = null;
     switchPage('home');
     updateCycleDashboard();
+
+    syncPeriodToBackend(earliest, latest);
 }
 
 // --- Settings Section Events ---
@@ -613,5 +634,33 @@ function syncProfileUI() {
         } else {
             opt.classList.remove('active');
         }
+    });
+}
+
+function syncPeriodToBackend(startDate, endDate) {
+    const token = localStorage.getItem('rubra_auth_token');
+    if (!token) return;
+
+    fetch(API_BASE_URL + '/api/cycles/period', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+            startDate: startDate,
+            endDate: endDate
+        })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to sync period to backend');
+        return response.json();
+    })
+    .then(data => {
+        console.log('Period synced to backend successfully:', data);
+        if (typeof fetchUserCycles === 'function') fetchUserCycles();
+    })
+    .catch(err => {
+        console.error('Error syncing period to backend:', err);
     });
 }
