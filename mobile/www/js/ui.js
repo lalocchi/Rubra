@@ -106,9 +106,13 @@ function showConfirmDialog(options) {
 
     // Set texts
     titleEl.innerText = options.title || 'Are you sure?';
-    descEl.innerText = options.description || '';
+    descEl.innerHTML = options.description || '';
     cancelBtn.innerText = options.cancelText || 'Cancel';
     okBtn.innerText = options.confirmText || 'Confirm';
+
+    // Reset button display states
+    okBtn.style.display = 'block';
+    cancelBtn.style.display = 'block';
 
     // Reset button action classes
     okBtn.className = 'confirm-btn btn-confirm';
