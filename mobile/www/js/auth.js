@@ -209,7 +209,7 @@ function apiRegister(name, email, password, cycleLength, periodDuration) {
             localStorage.removeItem('rubra_cycles');
             localStorage.removeItem('rubra_daily_logs');
             localStorage.removeItem('rubra_settings');
-            
+
             localStorage.setItem('rubra_auth_token', data.token);
             showToast('Registration successful! Welcome to Rubra.');
             checkAuth();
@@ -367,7 +367,7 @@ function loadGoogleClientId() {
 }
 
 function initGoogleSignIn() {
-    if (typeof google === 'undefined' || !googleClientId || googleClientId.includes('example-client-id')) {
+    if (typeof google === 'undefined' || !googleClientId) {
         console.warn('Google SDK not loaded or Client ID is not configured.');
         return;
     }
