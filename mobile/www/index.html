@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#ffffff" id="meta-theme-color">
     <title>Rubra - Period & Cycle Tracker</title>
-    <!-- Google Fonts: Outfit -->
+    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- App Modular Stylesheets -->
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/auth.css">
-    <!-- Google Identity Services SDK -->
+    <!-- Google Identity Services (GSI) Client SDK -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -29,10 +29,10 @@
                 <div class="auth-graphic" style="margin-top: 10px; margin-bottom: 20px;">
                     <img src="images/waving_hijab_girl.png" alt="Welcome Mascot" class="illustration-img" style="width: 200px; height: 200px;">
                 </div>
-                <h2 class="auth-title" style="font-size: 28px; margin-bottom: 10px;">Welcome to Rubra</h2>
+                <h2 class="auth-title" style="font-size: 28px; margin-bottom: 10px;" data-i18n="welcome_title">Welcome to Rubra</h2>
             </div>
             <div class="auth-action-bottom">
-                <button id="btn-welcome-start" class="btn-primary">Start</button>
+                <button id="btn-welcome-start" class="btn-primary" data-i18n="start_btn">Start</button>
             </div>
         </section>
 
@@ -42,8 +42,8 @@
                 <div class="auth-graphic">
                     <img src="images/girl_hugging_earth.png" alt="Language Selection" class="illustration-img">
                 </div>
-                <h2 class="auth-title">Please select your language</h2>
-                <p class="auth-subtitle">You can always change this later</p>
+                <h2 class="auth-title" data-i18n="please_select_language">Please select your language</h2>
+                <p class="auth-subtitle" data-i18n="always_change_later">You can always change this later</p>
                 
                 <div class="auth-dropdown-wrapper">
                     <select id="select-language" class="auth-select">
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="auth-action-bottom">
-                <button id="btn-language-continue" class="btn-primary">CONTINUE</button>
+                <button id="btn-language-continue" class="btn-primary" data-i18n="continue_btn">CONTINUE</button>
             </div>
         </section>
 
@@ -66,15 +66,14 @@
                 <div class="auth-graphic">
                     <img src="images/hand_holding_phone.png" alt="Registration Method" class="illustration-img">
                 </div>
-                <h2 class="auth-title">How would you like to register?</h2>
-                <p class="auth-subtitle">You can change this later</p>
+                <h2 class="auth-title" data-i18n="choose_method_title">How would you like to register?</h2>
+                <p class="auth-subtitle" data-i18n="always_change_later">You can change this later</p>
             </div>
             
             <div class="auth-action-bottom">
-                <!-- Direct Email Register/Login Button replacing Phone Input & Continue -->
-                <button id="btn-email-continue" class="btn-primary" style="margin-bottom: 12px;">Continue with Email</button>
+                <button id="btn-email-continue" class="btn-primary" style="margin-bottom: 12px;" data-i18n="continue_email">Continue with Email</button>
                 
-                <div class="auth-divider">or register using</div>
+                <div class="auth-divider" data-i18n="or_register_using">or register using</div>
                 
                 <div id="google-method-btn" style="margin-top: 12px; display: flex; justify-content: center; min-height: 40px; width: 100%;"></div>
             </div>
@@ -82,13 +81,13 @@
 
         <!-- STEP 3: Switcher Screen (Sign Up / Log In - Figma Screens 2, 3, 5) -->
         <section id="auth-step-email" class="auth-screen">
-            <h2 class="auth-title">Get Started Now</h2>
-            <p class="auth-subtitle text-center">Create an account or log in to explore about our app</p>
+            <h2 class="auth-title" data-i18n="get_started_now">Get Started Now</h2>
+            <p class="auth-subtitle text-center" data-i18n="welcome_desc">Create an account or log in to explore about our app</p>
             
             <!-- Tab Switcher -->
             <div class="auth-switcher">
-                <button id="tab-signup" class="switcher-tab active">Sign Up</button>
-                <button id="tab-login" class="switcher-tab">Log in</button>
+                <button id="tab-signup" class="switcher-tab active" data-i18n="sign_up">Sign Up</button>
+                <button id="tab-login" class="switcher-tab" data-i18n="log_in">Log in</button>
             </div>
 
             <!-- FORMS -->
@@ -97,9 +96,9 @@
                 <!-- SIGN UP FORM -->
                 <div id="form-signup" class="auth-form active">
                     <div class="input-group" id="group-signup-name">
-                        <label class="input-label">Full Name</label>
+                        <label class="input-label" data-i18n="full_name">Full Name</label>
                         <div class="input-wrapper">
-                            <input type="text" id="signup-name" class="auth-input">
+                            <input type="text" id="signup-name" class="auth-input" data-i18n="name_placeholder">
                             <span class="error-indicator-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E63946" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                             </span>
@@ -108,9 +107,9 @@
                     </div>
 
                     <div class="input-group" id="group-signup-email">
-                        <label class="input-label">E-mail</label>
+                        <label class="input-label" data-i18n="email">E-mail</label>
                         <div class="input-wrapper">
-                            <input type="email" id="signup-email" class="auth-input">
+                            <input type="email" id="signup-email" class="auth-input" data-i18n="email_placeholder">
                             <span class="error-indicator-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E63946" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                             </span>
@@ -119,9 +118,9 @@
                     </div>
 
                     <div class="input-group" id="group-signup-password">
-                        <label class="input-label">Password</label>
+                        <label class="input-label" data-i18n="password_label">Password</label>
                         <div class="input-wrapper">
-                            <input type="password" id="signup-password" class="auth-input">
+                            <input type="password" id="signup-password" class="auth-input" data-i18n="password_placeholder">
                             <span class="error-indicator-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E63946" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                             </span>
@@ -129,17 +128,17 @@
                         <span class="error-text">Password must be at least 6 characters</span>
                     </div>
 
-                    <button id="btn-submit-signup" class="btn-primary auth-btn-margin">Sign Up</button>
-                    <div class="auth-divider">or sign up using</div>
+                    <button id="btn-submit-signup" class="btn-primary auth-btn-margin" data-i18n="sign_up">Sign Up</button>
+                    <div class="auth-divider" data-i18n="or_signup_using">or sign up using</div>
                     <div id="google-signup-btn" style="margin-top: 12px; display: flex; justify-content: center; min-height: 40px; width: 100%;"></div>
                 </div>
 
                 <!-- LOG IN FORM -->
                 <div id="form-login" class="auth-form">
                     <div class="input-group" id="group-login-email">
-                        <label class="input-label">E-mail</label>
+                        <label class="input-label" data-i18n="email">E-mail</label>
                         <div class="input-wrapper">
-                            <input type="email" id="login-email" class="auth-input">
+                            <input type="email" id="login-email" class="auth-input" data-i18n="email_placeholder">
                             <span class="error-indicator-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E63946" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                             </span>
@@ -148,9 +147,9 @@
                     </div>
 
                     <div class="input-group" id="group-login-password">
-                        <label class="input-label">Password</label>
+                        <label class="input-label" data-i18n="password_label">Password</label>
                         <div class="input-wrapper">
-                            <input type="password" id="login-password" class="auth-input">
+                            <input type="password" id="login-password" class="auth-input" data-i18n="password_placeholder">
                             <span class="error-indicator-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E63946" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                             </span>
@@ -158,13 +157,13 @@
                         <span class="error-text">Password is required</span>
                     </div>
 
-                    <button id="btn-submit-login" class="btn-primary auth-btn-margin">Log In</button>
-                    <div class="auth-divider">or log in using</div>
+                    <button id="btn-submit-login" class="btn-primary auth-btn-margin" data-i18n="log_in">Log In</button>
+                    <div class="auth-divider" data-i18n="or_login_using">or log in using</div>
                     <div id="google-login-btn" style="margin-top: 12px; display: flex; justify-content: center; min-height: 40px; width: 100%;"></div>
                 </div>
             </div>
 
-            <button id="btn-back-to-method" class="btn-link">Back to registration methods</button>
+            <button id="btn-back-to-method" class="btn-link" data-i18n="back_btn">Back to registration methods</button>
         </section>
     </div>
 
@@ -192,7 +191,7 @@
         <div id="settings-panel-overlay" class="panel-overlay">
             <div class="settings-drawer">
                 <div class="drawer-header">
-                    <h3 class="drawer-title">Settings</h3>
+                    <h3 class="drawer-title" data-i18n="settings_title">Settings</h3>
                     <button id="btn-close-settings" class="btn-close-drawer">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </button>
@@ -203,7 +202,7 @@
                         <!-- Notifications toggle -->
                         <div class="settings-group" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                             <label class="setting-label" style="margin-bottom: 0;">
-                                <span>Allow notifications</span>
+                                <span data-i18n="allow_notifications">Allow notifications</span>
                             </label>
                             <label class="switch-container">
                                 <input type="checkbox" id="pref-notifications">
@@ -213,21 +212,21 @@
 
                         <!-- Language selector -->
                         <div class="settings-group" style="margin-bottom: 8px;">
-                            <label for="pref-lang" class="setting-label">Language</label>
-                            <select id="pref-lang" style="width: 100%; border: 1.5px solid #f2f2f7; border-radius: 12px; padding: 12px; font-family: Outfit; font-size: 14px; outline: none; background: #fbfbfd; color: #1c1c1e; cursor: pointer;">
+                            <label for="pref-lang" class="setting-label" data-i18n="language_label">Language</label>
+                            <select id="pref-lang" style="width: 100%; border: 1.5px solid #f2f2f7; border-radius: 12px; padding: 12px; font-family: Poppins; font-size: 14px; outline: none; background: #fbfbfd; color: #1c1c1e; cursor: pointer;">
                                 <option value="en" selected>English</option>
-                                <option value="az">Azerbaijani</option>
+                                <option value="az">Azərbaycanca</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="glass-card logout-card" style="margin-top: 10px; padding: 12px;">
-                        <button id="btn-logout" class="btn-logout-danger" style="width: 100%; border: 1px solid rgba(230,57,70,0.3); background: rgba(230,57,70,0.06); color: #FF4D6D; padding: 12px; border-radius: 16px; font-family: Outfit; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">Log Out</button>
+                        <button id="btn-logout" class="btn-logout-danger" style="width: 100%; border: 1px solid rgba(230,57,70,0.3); background: rgba(230,57,70,0.06); color: #FF4D6D; padding: 12px; border-radius: 16px; font-family: Poppins; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;" data-i18n="logout_btn">Log Out</button>
                     </div>
 
                     <div class="glass-card about-card" style="margin-top: 18px;">
-                        <h3 class="about-title">About Rubra</h3>
-                        <p class="about-text">Your data is only stored on your device, it is not sent to any server. Ad-free and completely private.</p>
+                        <h3 class="about-title" data-i18n="about_title">About Rubra</h3>
+                        <p class="about-text" data-i18n="about_text">Your data is only stored on your device, it is not sent to any server. Ad-free and completely private.</p>
                         <span class="app-version">Version 1.0.0</span>
                     </div>
                 </div>
@@ -241,7 +240,7 @@
                     <button id="btn-close-profile" class="btn-close-drawer" style="margin-right: auto; padding: 4px;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </button>
-                    <h3 class="drawer-title" style="margin: 0; flex: 1; text-align: center; margin-right: 36px;">Profile</h3>
+                    <h3 class="drawer-title" style="margin: 0; flex: 1; text-align: center; margin-right: 36px;" data-i18n="profile_title">Profile</h3>
                 </div>
                 <div class="drawer-content">
                     <!-- User details preview -->
@@ -255,7 +254,7 @@
 
                     <!-- Avatar selection grid -->
                     <div class="glass-card avatar-selection-card" style="padding: 16px; margin-bottom: 20px;">
-                        <span class="setting-label" style="font-size: 13px; font-weight: 700; color: #8e8e93; margin-bottom: 12px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Choose Avatar</span>
+                        <span class="setting-label" style="font-size: 13px; font-weight: 700; color: #8e8e93; margin-bottom: 12px; display: block; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="choose_avatar">Choose Avatar</span>
                         <div class="avatar-grid" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; padding: 4px 0;">
                             <div class="avatar-option active" data-avatar="images/avatar_1.png">
                                 <img src="images/avatar_1.png" alt="Avatar 1" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
@@ -280,17 +279,17 @@
 
                     <!-- Personal Cycle Configuration Parameters -->
                     <div class="glass-card settings-card" style="margin-bottom: 20px;">
-                        <span class="setting-label" style="font-size: 13px; font-weight: 700; color: #8e8e93; margin-bottom: 16px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Cycle Settings</span>
+                        <span class="setting-label" style="font-size: 13px; font-weight: 700; color: #8e8e93; margin-bottom: 16px; display: block; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="cycle_settings">Cycle Settings</span>
                         <div class="settings-group" style="margin-bottom: 20px;">
                             <label for="profile-input-cycle-len" class="setting-label">
-                                <span>Cycle duration (days)</span>
+                                <span data-i18n="cycle_duration">Cycle duration (days)</span>
                                 <span class="setting-val" id="profile-val-cycle-len">28</span>
                             </label>
                             <input type="range" id="profile-input-cycle-len" min="20" max="45" value="28" class="range-slider">
                         </div>
                         <div class="settings-group" style="margin-bottom: 8px;">
                             <label for="profile-input-period-len" class="setting-label">
-                                <span>Period duration (days)</span>
+                                <span data-i18n="period_duration">Period duration (days)</span>
                                 <span class="setting-val" id="profile-val-period-len">5</span>
                             </label>
                             <input type="range" id="profile-input-period-len" min="3" max="10" value="5" class="range-slider">
@@ -299,7 +298,7 @@
 
                     <!-- Profile Save Actions -->
                     <div class="action-container-home" style="margin-top: 10px; margin-bottom: 20px;">
-                        <button id="btn-save-profile" class="btn-log-period-today" style="width: 100%; max-width: none;">Save Profile</button>
+                        <button id="btn-save-profile" class="btn-log-period-today" style="width: 100%; max-width: none;" data-i18n="save_profile">Save Profile</button>
                     </div>
                 </div>
             </div>
@@ -317,7 +316,7 @@
                 <h3 class="confirm-title" id="confirm-title-text">Title</h3>
                 <p class="confirm-description" id="confirm-desc-text">Description</p>
                 <div class="confirm-actions">
-                    <button class="confirm-btn btn-cancel" id="btn-confirm-cancel">Cancel</button>
+                    <button class="confirm-btn btn-cancel" id="btn-confirm-cancel" data-i18n="cancel_btn">Cancel</button>
                     <button class="confirm-btn btn-confirm" id="btn-confirm-ok">Confirm</button>
                 </div>
             </div>
@@ -333,7 +332,7 @@
                     <!-- Circle Tracker Panel -->
                     <div class="tracker-circle-card">
                         <div class="circle-content-panel">
-                            <span class="circle-label-small">CURRENT PHASE</span>
+                            <span class="circle-label-small" data-i18n="current_phase_label">CURRENT PHASE</span>
                             <h2 class="circle-phase-title" id="cycle-phase-name">Follicular Phase</h2>
                             <div class="circle-divider-line"></div>
                             <span class="circle-days-left" id="cycle-days-left-text">Next period in<br><strong>5 days</strong></span>
@@ -349,7 +348,7 @@
                             <line x1="12" y1="8" x2="12" y2="16"></line>
                             <line x1="8" y1="12" x2="16" y2="12"></line>
                         </svg>
-                        Log Period Today
+                        <span class="btn-text" data-i18n="log_period_today">Log Period Today</span>
                     </button>
                 </div>
             </section>
@@ -358,7 +357,7 @@
             <section id="page-log" class="app-page">
                 <div class="glass-card log-panel-card">
                     <div class="log-card-header">
-                        <h2 class="log-card-title">Log Period</h2>
+                        <h2 class="log-card-title" data-i18n="log_period_title">Log Period</h2>
                         <button id="btn-close-log" class="btn-close-x">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         </button>
@@ -391,8 +390,8 @@
                 </div>
 
                 <div class="action-container-home" style="margin-top: 24px; flex-direction: column; gap: 10px; align-items: center;">
-                    <button class="btn-log-period-today" id="btn-save-period">Save Current Period</button>
-                    <button class="btn-secondary-log" id="btn-save-past-record" style="width: 100%; max-width: 320px; border: 1.5px solid #933ce6; background: none; color: #933ce6; padding: 14px; border-radius: 28px; font-weight: 600; font-family: Outfit; font-size: 15px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <button class="btn-log-period-today" id="btn-save-period" data-i18n="save_current_period">Save Current Period</button>
+                    <button class="btn-secondary-log" id="btn-save-past-record" style="width: 100%; max-width: 320px; border: 1.5px solid #933ce6; background: none; color: #933ce6; padding: 14px; border-radius: 28px; font-weight: 600; font-family: Poppins; font-size: 15px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 8px;">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                             <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -401,7 +400,7 @@
                             <line x1="12" y1="14" x2="12" y2="20"></line>
                             <line x1="9" y1="17" x2="15" y2="17"></line>
                         </svg>
-                        Save as Past Record
+                        <span data-i18n="log_period_past">Save as Past Record</span>
                     </button>
                 </div>
             </section>
@@ -437,7 +436,7 @@
 
                 <!-- Past Records Section -->
                 <div class="past-records-section">
-                    <h3 class="past-records-label">PAST RECORDS</h3>
+                    <h3 class="past-records-label" data-i18n="past_records_label">PAST RECORDS</h3>
                     <div class="past-records-list" id="history-container">
                         <!-- Loaded dynamically by JS -->
                     </div>
@@ -453,7 +452,7 @@
                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                     <path d="M12 9v6M9 12h6" stroke-width="2"/>
                 </svg>
-                <span class="nav-label">Home</span>
+                <span class="nav-label" data-i18n="nav_home">Home</span>
             </button>
             <button class="nav-item" data-page="log">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
@@ -461,7 +460,7 @@
                     <line x1="12" y1="8" x2="12" y2="16"></line>
                     <line x1="8" y1="12" x2="16" y2="12"></line>
                 </svg>
-                <span class="nav-label">Log</span>
+                <span class="nav-label" data-i18n="nav_log">Log</span>
             </button>
             <button class="nav-item" data-page="history">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
@@ -471,12 +470,13 @@
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                     <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>
                 </svg>
-                <span class="nav-label">History</span>
+                <span class="nav-label" data-i18n="nav_history">History</span>
             </button>
         </nav>
     </div>
 
     <!-- App Logic Modules (Loaded sequentially in global scope) -->
+    <script src="js/lang.js"></script>
     <script src="js/state.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/auth.js"></script>

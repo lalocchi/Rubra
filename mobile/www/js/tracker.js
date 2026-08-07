@@ -5,8 +5,8 @@ function updateCycleDashboard() {
     if (!phaseNameEl || !daysLeftEl) return;
 
     if (cycles.length === 0) {
-        phaseNameEl.innerText = 'No records';
-        daysLeftEl.innerHTML = 'Add cycle history<br><strong>to begin prediction</strong>';
+        phaseNameEl.innerText = t('no_records');
+        daysLeftEl.innerHTML = t('add_cycle_history');
         return;
     }
 
@@ -26,18 +26,18 @@ function updateCycleDashboard() {
     let phase = '';
     
     if (cycleDay < 1) {
-        phase = 'Expected Phase';
+        phase = t('late_phase');
     } else {
         if (cycleDay <= settings.periodLength) {
-            phase = 'Menstrual Phase';
+            phase = t('menstrual_phase');
         } else if (cycleDay <= 11) {
-            phase = 'Follicular Phase';
+            phase = t('follicular_phase');
         } else if (cycleDay >= 12 && cycleDay <= 16) {
-            phase = 'Ovulatory Phase';
+            phase = t('ovulatory_phase');
         } else if (cycleDay > 16 && cycleDay <= settings.cycleLength) {
-            phase = 'Luteal Phase';
+            phase = t('luteal_phase');
         } else {
-            phase = 'Late Phase';
+            phase = t('late_phase');
         }
     }
     phaseNameEl.innerText = phase;
@@ -45,18 +45,18 @@ function updateCycleDashboard() {
     // Display days remaining
     if (latestCycle.endDate === null) {
         // Ongoing period
-        daysLeftEl.innerHTML = 'Period Active<br><strong>Day ' + cycleDay + '</strong>';
+        daysLeftEl.innerHTML = t('period_active_day', { day: cycleDay });
     } else {
         const nextPeriodDate = new Date(start);
         nextPeriodDate.setDate(nextPeriodDate.getDate() + settings.cycleLength);
         const daysUntilNext = Math.ceil((nextPeriodDate - today) / (1000 * 60 * 60 * 24));
 
         if (daysUntilNext > 0) {
-            daysLeftEl.innerHTML = 'Next period in<br><strong>' + daysUntilNext + ' days</strong>';
+            daysLeftEl.innerHTML = t('next_period_in_days', { days: daysUntilNext });
         } else if (daysUntilNext === 0) {
-            daysLeftEl.innerHTML = 'Next period<br><strong>Expected today</strong>';
+            daysLeftEl.innerHTML = t('next_period_expected_today');
         } else {
-            daysLeftEl.innerHTML = 'Next period<br><strong>' + Math.abs(daysUntilNext) + ' days late</strong>';
+            daysLeftEl.innerHTML = t('next_period_days_late', { days: Math.abs(daysUntilNext) });
         }
     }
 }
@@ -269,7 +269,7 @@ function renderHistoryList() {
 function deleteCycle(id) {
     cycles = cycles.filter(c => c.id !== id);
     localStorage.setItem('rubra_cycles', JSON.stringify(cycles));
-    showToast('Record deleted.');
+    showToast(t('record_deleted'));
     renderHistory();
     updateCycleDashboard();
 
@@ -305,7 +305,7 @@ function saveCurrentPeriodRecord(earliest, latest) {
     cycles.push(newCycle);
 
     localStorage.setItem('rubra_cycles', JSON.stringify(cycles));
-    showToast('Current period saved successfully!');
+    showToast(t('current_period_saved'));
 
     // Reset select state and route home
     selectedLogDates = [];
@@ -320,7 +320,7 @@ function saveCurrentPeriodRecord(earliest, latest) {
 // --- Period Saving logic ---
 function saveLoggedPeriod() {
     if (selectedLogDates.length === 0) {
-        showToast('Please select at least one day in the calendar', 'error');
+        showToast(t('select_day_prompt'), 'error');
         return;
     }
 
@@ -355,7 +355,7 @@ function saveLoggedPeriod() {
 // Saves the selected calendar range as a completed past record
 function saveLoggedPeriodAsPast() {
     if (selectedLogDates.length === 0) {
-        showToast('Please select at least one day in the calendar', 'error');
+        showToast(t('select_day_prompt'), 'error');
         return;
     }
 
@@ -376,7 +376,7 @@ function saveLoggedPeriodAsPast() {
     cycles.push(newCycle);
 
     localStorage.setItem('rubra_cycles', JSON.stringify(cycles));
-    showToast('Past record saved successfully!');
+    showToast(t('past_record_saved'));
 
     // Reset select state and route home
     selectedLogDates = [];
@@ -418,17 +418,16 @@ function setupSettings() {
             const val = themeSelect.value;
             localStorage.setItem('rubra_pref_theme', val);
             applyTheme(val);
-            showToast('Theme updated.');
+            showToast(t('theme_updated'));
         });
     }
 
     if (langSelect) {
-        const savedLang = localStorage.getItem('rubra_pref_lang') || 'en';
-        langSelect.value = savedLang;
+        langSelect.value = currentLanguage;
         langSelect.addEventListener('change', () => {
             const val = langSelect.value;
-            localStorage.setItem('rubra_pref_lang', val);
-            showToast('Language updated (Please reload to apply completely).');
+            setLanguage(val);
+            showToast(t('language_updated'));
         });
     }
 
@@ -437,7 +436,7 @@ function setupSettings() {
         notifToggle.checked = savedNotif;
         notifToggle.addEventListener('change', () => {
             localStorage.setItem('rubra_pref_notifications', notifToggle.checked);
-            showToast(notifToggle.checked ? 'Reminders enabled.' : 'Reminders disabled.');
+            showToast(notifToggle.checked ? t('reminders_enabled') : t('reminders_disabled'));
         });
     }
 }
