@@ -2,19 +2,29 @@ package com.rubra.backend.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
 
-    // 256-bitlik secret key
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    private Key key;
     private final long jwtExpirationInMs = 86400000; // 24 saat (1 gün)
+
+    @PostConstruct
+    public void init() {
+        // Initialize the HMAC SHA key using the injected secret key string
+        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateToken(String email, Long userId) {
         Date now = new Date();
