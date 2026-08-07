@@ -50,6 +50,13 @@ function setupAuthListeners() {
         showAuthScreen('method');
     });
 
+    const selectLanguage = document.getElementById('select-language');
+    if (selectLanguage) {
+        selectLanguage.addEventListener('change', (e) => {
+            setLanguage(e.target.value);
+        });
+    }
+
     // Onboarding Step 2: Email Registration Continue
     const btnEmailContinue = document.getElementById('btn-email-continue');
     if (btnEmailContinue) {
@@ -84,10 +91,10 @@ function setupAuthListeners() {
     const btnLogout = document.getElementById('btn-logout');
     btnLogout.addEventListener('click', () => {
         showConfirmDialog({
-            title: "Log Out",
-            description: "Are you sure you want to log out of Rubra?",
-            confirmText: "Log Out",
-            cancelText: "Cancel",
+            title: t('logout_confirm_title'),
+            description: t('logout_confirm_desc'),
+            confirmText: t('logout_btn'),
+            cancelText: t('cancel_btn'),
             isDanger: true,
             onConfirm: () => {
                 localStorage.removeItem('rubra_auth_token');
@@ -96,7 +103,7 @@ function setupAuthListeners() {
                 localStorage.removeItem('rubra_daily_logs');
                 localStorage.removeItem('rubra_settings');
                 checkAuth();
-                showToast('Logged out successfully.');
+                showToast(t('logout_success'));
             }
         });
     });
@@ -211,7 +218,7 @@ function apiRegister(name, email, password, cycleLength, periodDuration) {
             localStorage.removeItem('rubra_settings');
 
             localStorage.setItem('rubra_auth_token', data.token);
-            showToast('Registration successful! Welcome to Rubra.');
+            showToast(t('registration_success'));
             checkAuth();
         } else {
             throw new Error('No token returned');
@@ -219,7 +226,7 @@ function apiRegister(name, email, password, cycleLength, periodDuration) {
     })
     .catch(err => {
         console.error('Registration error:', err);
-        showToast(err.message || 'Could not connect to the server. Please check if the backend is running.', 'error');
+        showToast(err.message || t('server_connection_error'), 'error');
     });
 }
 
@@ -252,7 +259,7 @@ function apiLogin(email, password) {
             localStorage.removeItem('rubra_settings');
 
             localStorage.setItem('rubra_auth_token', data.token);
-            showToast('Logged in successfully!');
+            showToast(t('login_success'));
             checkAuth();
         } else {
             throw new Error('No token returned');
@@ -260,7 +267,7 @@ function apiLogin(email, password) {
     })
     .catch(err => {
         console.error('Login error:', err);
-        showToast(err.message || 'Could not connect to the server. Please check if the backend is running.', 'error');
+        showToast(err.message || t('server_connection_error'), 'error');
     });
 }
 
@@ -340,11 +347,11 @@ function updateUserProfile(name, avatar, cycleLength, periodLength) {
 
         syncProfileUI();
         updateCycleDashboard();
-        showToast('Profile updated successfully!');
+        showToast(t('profile_updated'));
     })
     .catch(err => {
         console.error('Error updating profile:', err);
-        showToast('Failed to save profile changes. Server is unreachable.', 'error');
+        showToast(t('profile_update_failed'), 'error');
     });
 }
 
@@ -425,7 +432,7 @@ function handleGoogleCredentialResponse(response) {
     if (response && response.credential) {
         apiGoogleLogin(response.credential);
     } else {
-        showToast('Google authentication failed', 'error');
+        showToast(t('google_auth_failed'), 'error');
     }
 }
 
@@ -456,7 +463,7 @@ function apiGoogleLogin(idToken) {
             localStorage.removeItem('rubra_settings');
 
             localStorage.setItem('rubra_auth_token', data.token);
-            showToast('Logged in with Google successfully!');
+            showToast(t('google_login_success'));
             checkAuth();
         } else {
             throw new Error('No token returned from Google authentication');
@@ -464,7 +471,7 @@ function apiGoogleLogin(idToken) {
     })
     .catch(err => {
         console.error('Google auth error:', err);
-        showToast(err.message || 'Could not connect to the server. Please try again.', 'error');
+        showToast(err.message || t('google_connection_error'), 'error');
     });
 }
 
