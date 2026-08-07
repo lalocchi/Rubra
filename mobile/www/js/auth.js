@@ -1,7 +1,7 @@
-// --- API Base URL configuration for cross-origin local testing ---
-const API_BASE_URL = window.location.origin.includes('5500') || window.location.protocol === 'file:' 
-    ? 'http://localhost:8080' 
-    : '';
+// --- API Base URL configuration pointing to live Render backend ---
+const API_BASE_URL = window.Capacitor || window.location.protocol === 'file:' || !window.location.origin.includes('5500')
+    ? 'https://rubra-backend-lasg.onrender.com'
+    : 'http://localhost:8080';
 
 // --- Navigation Guard & Auth Layout Switcher ---
 function checkAuth() {
